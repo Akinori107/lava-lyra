@@ -3,10 +3,7 @@ from __future__ import annotations
 import random
 from collections.abc import Iterable, Iterator
 from copy import copy
-from typing import TYPE_CHECKING, SupportsIndex, overload
-
-if TYPE_CHECKING:
-    from typing_extensions import Self
+from typing import Self, SupportsIndex, overload, override
 
 from .enums import LoopMode
 from .exceptions import QueueEmpty, QueueException, QueueFull
@@ -79,6 +76,7 @@ class Queue(Iterable[Track]):
         """Delete item at given position."""
         self._queue.__delitem__(index)
 
+    @override
     def __iter__(self) -> Iterator[Track]:
         """Iterate over members in the queue.
         Does not remove items when iterating.
@@ -129,17 +127,11 @@ class Queue(Iterable[Track]):
     def _index(self, item: Track) -> int:
         return self._queue.index(item)
 
-    def _put(self, item: Track) -> None:
-        self._queue.append(item)
-
     def _insert(self, index: int, item: Track) -> None:
         self._queue.insert(index, item)
 
     def _remove(self, item: Track) -> None:
         self._queue.remove(item)
-
-    def _get_random_float(self) -> float:
-        return random.random()
 
     @staticmethod
     def _check_track(item: Track) -> Track:
@@ -149,7 +141,7 @@ class Queue(Iterable[Track]):
         return item
 
     @classmethod
-    def _check_track_container(cls, iterable: Iterable) -> list[Track]:
+    def _check_track_container(cls, iterable: Iterable[Track]) -> list[Track]:
         iterable = list(iterable)
         for item in iterable:
             cls._check_track(item)
@@ -186,7 +178,7 @@ class Queue(Iterable[Track]):
         """Returns the amount of items in the queue"""
         return len(self._queue)
 
-    def get_queue(self) -> list:
+    def get_queue(self) -> list[Track]:
         """Returns the queue as a List"""
         return self._queue
 
@@ -206,10 +198,10 @@ class Queue(Iterable[Track]):
             if not self._current_item or self._current_item not in self._queue:
                 if not self._queue:
                     raise QueueEmpty("No items in the queue.")
-                self._current_item = self._queue[0]
+                item = self._queue[0]
 
             # we reached the end of the queue, go back to first track
-            if self._index(self._current_item) == len(self._queue) - 1:
+            elif self._index(self._current_item) == len(self._queue) - 1:
                 item = self._queue[0]
 
             # we are in the middle of the queue, go the next item
@@ -307,8 +299,15 @@ class Queue(Iterable[Track]):
                         f"Queue has {self.count}/{self.max_size} items, cannot add {new_len} more.",
                     )
 
-        for item in iterable:
-            self.put(item)
+            for item in iterable:
+                self.put(item)
+        else:
+            for item in iterable:
+                if not isinstance(item, Track):
+                    continue
+                if not self._overflow and self.max_size is not None and self.count >= self.max_size:
+                    break
+                self.put(item)
 
     def copy(self) -> Queue:
         """Create a copy of the current queue including its members."""
@@ -389,7 +388,10 @@ class Queue(Iterable[Track]):
         if self._loop_mode == LoopMode.TRACK:
             raise QueueException("Jumping the queue whilst looping a track is not allowed.")
 
-        index = self.find_position(item)
+        try:
+            index = self.find_position(item)
+        except ValueError as e:
+            raise QueueException(f"Cannot jump to '{item}': item is not in the queue.") from e
         if self._loop_mode == LoopMode.QUEUE:
             self._current_item = self._queue[index - 1]
         else:
