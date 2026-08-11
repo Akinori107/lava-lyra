@@ -653,16 +653,19 @@ class Player(VoiceProtocolType):
 
             # Build data based on node type
             if self._node._is_nodelink:
-                data = {
-                    "nextTrack" if gapless else "track": {"encoded": search.track_id},
-                    "position": start,
-                    "endTime": self._adjust_end_time(),
-                }
+                if gapless:
+                    data = {"nextTrack": {"encoded": search.track_id}}
+                else:
+                    data = {
+                        "track": {"encoded": search.track_id},
+                        "position": start,
+                        "endTime": end if end > 0 else self._adjust_end_time(),
+                    }
             else:
                 data = {
                     "encodedTrack": search.track_id,
                     "position": start,
-                    "endTime": self._adjust_end_time(),
+                    "endTime": end if end > 0 else self._adjust_end_time(),
                 }
 
             track.original = search
@@ -671,16 +674,19 @@ class Player(VoiceProtocolType):
         else:
             # Build data based on node type
             if self._node._is_nodelink:
-                data = {
-                    "nextTrack" if gapless else "track": {"encoded": track.track_id},
-                    "position": start,
-                    "endTime": self._adjust_end_time(),
-                }
+                if gapless:
+                    data = {"nextTrack": {"encoded": track.track_id}}
+                else:
+                    data = {
+                        "track": {"encoded": track.track_id},
+                        "position": start,
+                        "endTime": end if end > 0 else self._adjust_end_time(),
+                    }
             else:
                 data = {
                     "encodedTrack": track.track_id,
                     "position": start,
-                    "endTime": self._adjust_end_time(),
+                    "endTime": end if end > 0 else self._adjust_end_time(),
                 }
 
         # Reset lyrics state when playing a new track
@@ -720,8 +726,8 @@ class Player(VoiceProtocolType):
         # If it isnt zero, it'll be set to None.
         # Otherwise, it'll be set here:
 
-        if end > 0:
-            data["endTime"] = end
+        # if end > 0:
+        #     data["endTime"] = end
 
         try:
             await self._node.send(
