@@ -213,6 +213,11 @@ class Node:
         )
 
     @property
+    def identifier(self) -> str:
+        """Property which returns this node's identifier"""
+        return self._identifier
+
+    @property
     def enabled(self) -> bool:
         """Whether this node is enabled and allowed to connect."""
         return self._enabled
