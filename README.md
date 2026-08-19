@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/lava-lyra.svg)](https://pypi.org/project/lava-lyra/)
 [![License](https://img.shields.io/github/license/ParrotXray/lava-lyra.svg)](https://github.com/ParrotXray/lava-lyra/blob/main/LICENSE)
 
-A modern Lavalink v4 wrapper supporting both py-cord and discord.py, based on the excellent [Pomice](https://github.com/cloudwithax/pomice) library by cloudwithax.
+A modern Lavalink v4 and NodeLink v3 wrapper supporting both Py-cord and Discord.py, based on the excellent [Pomice](https://github.com/cloudwithax/pomice) library by cloudwithax.
 
 ## Quick Links
 - [Read the Docs](https://lava-lyra.readthedocs.io/en/latest/)
@@ -15,12 +15,12 @@ A modern Lavalink v4 wrapper supporting both py-cord and discord.py, based on th
 
 Lyra is a complete refactor of Pomice for **Lavalink v4.X or NodeLink v3.X**, bringing significant improvements:
 
-- **Full Lavalink v4 REST API support**
+- **Full Lavalink v4 and NodeLink v3 REST API support**
 - **Server-side plugin integration** (LavaSrc, YouTube plugin, etc.)
 - **Simplified setup** - No more API credentials needed in client
 - **Better error handling** and plugin support
 - **Removed deprecated modules** (client-side Spotify/Apple Music parsing)
-- **Optimized for py-cord** instead of discord.py
+- **Optimized for Py-cord and Discord.py**
 - **Improved documentation** and examples
 
 ## Key Differences from Pomice
@@ -43,9 +43,18 @@ Lyra is a complete refactor of Pomice for **Lavalink v4.X or NodeLink v3.X**, br
 pip install lava-lyra
 ```
 
+Lyra doesn't bundle a Discord library by default — install it as an extra alongside Lyra,
+depending on which one you use:
+
+```bash
+pip install lava-lyra[py-cord]
+# or
+pip install lava-lyra[discord.py]
+```
+
 ## Basic Usage
 
-### Pycord Example
+### Py-cord Example
 ```python
 import discord
 import lava_lyra
@@ -111,7 +120,7 @@ bot.run("your_bot_token")
 ```
 ## Playing Music
 
-### Pycord Example
+### Py-cord Example
 ```python
 @bot.slash_command(description="Play music")
 async def play(ctx, query: str):
@@ -141,7 +150,7 @@ async def play(interaction, query: str):
     if not interaction.user.voice:
         return await interaction.response.send_message("You need to be in a voice channel!")
 
-    player = await ctx.author.voice.channel.connect(cls=lava_lyra.Player)
+    player = await interaction.user.voice.channel.connect(cls=lava_lyra.Player)
 
     # Search for tracks (supports Spotify, YouTube, Apple Music via plugins!)
     results = await player.get_tracks(query)
@@ -172,7 +181,7 @@ node = await lava_lyra.NodePool.create_node(
 )
 ```
 
-### Pycord Example
+### Py-cord Example
 ```python
 @bot.slash_command(description="Search for music")
 async def search(ctx, query: str, platform: str = "youtube"):

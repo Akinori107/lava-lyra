@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        extra: ["discordpy", "py-cord"]
+        extra: ["discord.py", "py-cord"]
         python-version: ["3.12", "3.13", "3.14"]
 
     steps:
