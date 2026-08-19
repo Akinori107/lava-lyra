@@ -63,11 +63,11 @@ To add a song to the queue, we must use `Queue.put()`
 Queue.put()
 ```
 
-After you have initialized your function, we need to include the `item` parameter, which is a `Track`:
+After you have initialized your function, we need to pass the `Track` positionally — `put()` doesn't accept `item` as a keyword argument:
 
 ```py
 
-Queue.put(item=<your Track here>)
+Queue.put(<your Track here>)
 
 ```
 
