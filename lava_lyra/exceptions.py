@@ -97,8 +97,7 @@ class QueueEmpty(QueueException):
 class LavalinkVersionIncompatible(LyraException):
     """Lavalink version is incompatible.
 
-    Lyra v3.0+ requires Lavalink v4.0 or higher.
-    For Lavalink v3.x support, use an older version of Lyra.
+    Lyra requires Lavalink v4.2.0+ or NodeLink v3.2.0+. Lavalink v3.x is not supported.
     """
 
 
