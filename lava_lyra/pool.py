@@ -83,7 +83,6 @@ class Node:
         "_latency_cache_time",
         "_latency_task",
         "_log",
-        "_log_level",
         "_loop",
         "_lyrics_enabled",
         "_password",

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import re
-from enum import Enum, IntEnum
+from enum import Enum
 from typing import ClassVar, override
 
 __all__ = (
     "LavaSearchType",
-    "LogLevel",
     "LoopMode",
     "MixEndReason",
     "NodeAlgorithm",
@@ -349,40 +348,6 @@ class URLRegex:
     LAVALINK_SEARCH = re.compile(r"(?P<type>ytm?|sc)search:")
 
     BASE_URL = re.compile(r"https?://(?:www\.)?.+")
-
-
-class LogLevel(IntEnum):
-    """
-    The enum for specifying the logging level within Lyra.
-    This class serves as shorthand for logging.<level>
-    This enum is exclusively for the logging feature in Lyra.
-    If you are not using this feature, this class is not necessary.
-
-
-    LogLevel.DEBUG sets the logging level to "debug".
-
-    LogLevel.INFO sets the logging level to "info".
-
-    LogLevel.WARN sets the logging level to "warn".
-
-    LogLevel.ERROR sets the logging level to "error".
-
-    LogLevel.CRITICAL sets the logging level to "CRITICAL".
-
-    """
-
-    DEBUG = 10
-    INFO = 20
-    WARN = 30
-    ERROR = 40
-    CRITICAL = 50
-
-    @classmethod
-    def from_str(cls, level_str: str) -> LogLevel:
-        try:
-            return cls[level_str.upper()]
-        except KeyError:
-            raise ValueError(f"No such log level: {level_str}")
 
 
 class LavaSearchType(Enum):
