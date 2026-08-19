@@ -28,7 +28,7 @@ await NodePool.create_node(
 `Node` does not expose a `SearchManager` as a public property. Instead, `Node` provides a `load_search()` convenience method that wraps `SearchManager.load_search()`:
 
 ```py
-node = await NodePool.get_node(identifier="MAIN")
+node = NodePool.get_node(identifier="MAIN")
 result = await node.load_search(query="...", types=[...])
 ```
 
@@ -36,12 +36,12 @@ You can also check whether search is enabled for a node via `Node.search_enabled
 
 ## Performing a search
 
-Use `SearchManager.load_search()` to run a rich search query:
+Use `Node.load_search()` to run a rich search query:
 
 ```py
 from lava_lyra import LavaSearchType, SearchType
 
-result = await search_manager.load_search(
+result = await node.load_search(
     query="architects animals",
     types=[LavaSearchType.TRACK, LavaSearchType.ALBUM],
     search_type=SearchType.ytsearch,
@@ -156,7 +156,7 @@ async def search(self, ctx, *, query: str):
     player = ctx.voice_client
     node = player.node
 
-    result = await node.search.load_search(
+    result = await node.load_search(
         query=query,
         types=[LavaSearchType.TRACK],
         search_type=SearchType.ytsearch,
@@ -175,7 +175,7 @@ async def search(self, ctx, *, query: str):
 ## Example: search Spotify for a track and album
 
 ```py
-result = await node.search.load_search(
+result = await node.load_search(
     query="metallica",
     types=[LavaSearchType.TRACK, LavaSearchType.ALBUM, LavaSearchType.ARTIST],
     search_type=SearchType.spsearch,
