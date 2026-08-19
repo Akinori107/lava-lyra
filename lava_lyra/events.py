@@ -35,7 +35,6 @@ __all__ = (
     "VolumeChangedEvent",
     "WebSocketClosedEvent",
     "WebSocketClosedPayload",
-    "WebSocketOpenEvent",
 )
 
 
@@ -81,7 +80,6 @@ class TrackStartEvent(LyraEvent):
         self.player: Player = player
         self.track: Track | None = self.player._current
 
-        # on_lyra_track_start(player, track)
         self.handler_args = self.player, self.track
 
     def __repr__(self) -> str:
@@ -102,7 +100,6 @@ class TrackEndEvent(LyraEvent):
         self.track: Track | None = self.player._ending_track
         self.reason: str = data.get("reason", "")
 
-        # on_lyra_track_end(player, track, reason)
         self.handler_args = self.player, self.track, self.reason
 
     def __repr__(self) -> str:
@@ -127,7 +124,6 @@ class TrackStuckEvent(LyraEvent):
         self.track: Track | None = self.player._ending_track
         self.threshold: float = data.get("thresholdMs", 0)
 
-        # on_lyra_track_stuck(player, track, threshold)
         self.handler_args = self.player, self.track, self.threshold
 
     def __repr__(self) -> str:
@@ -159,7 +155,8 @@ class TrackExceptionPayload:
 
 class TrackExceptionEvent(LyraEvent):
     """Fired when a track error has occured.
-    Returns the player associated with the event along with the error code and exception.
+    Returns the player associated with the event along with the track and a
+    TrackExceptionPayload describing the message, severity, and cause.
     """
 
     name = "track_exception"
@@ -179,7 +176,6 @@ class TrackExceptionEvent(LyraEvent):
         else:
             self.exception = TrackExceptionPayload(message=str(raw_exception))
 
-        # on_lyra_track_exception(player, track, error)
         self.handler_args = self.player, self.track, self.exception
 
     def __repr__(self) -> str:
@@ -214,7 +210,8 @@ class WebSocketClosedPayload:
 
 class WebSocketClosedEvent(LyraEvent):
     """Fired when a websocket connection to a node has been closed.
-    Returns the reason and the error code.
+    Returns a WebSocketClosedPayload with the guild, close code, reason,
+    and whether the close was remote.
     """
 
     name = "websocket_closed"
@@ -226,31 +223,10 @@ class WebSocketClosedEvent(LyraEvent):
         bot = getattr(player, "_bot", None)
         self.payload: WebSocketClosedPayload = WebSocketClosedPayload(data, bot)
 
-        # on_lyra_websocket_closed(payload)
         self.handler_args = (self.payload,)
 
     def __repr__(self) -> str:
         return f"<Lyra.WebsocketClosedEvent payload={self.payload!r}>"
-
-
-class WebSocketOpenEvent(LyraEvent):
-    """Fired when a websocket connection to a node has been initiated.
-    Returns the target and the session SSRC.
-    """
-
-    name = "websocket_open"
-
-    __slots__ = ("ssrc", "target")
-
-    def __init__(self, data: dict[str, Any], _: Any) -> None:
-        self.target: str = data.get("target", "")
-        self.ssrc: int = data.get("ssrc", 0)
-
-        # on_lyra_websocket_open(target, ssrc)
-        self.handler_args = self.target, self.ssrc
-
-    def __repr__(self) -> str:
-        return f"<Lyra.WebsocketOpenEvent target={self.target!r} ssrc={self.ssrc!r}>"
 
 
 class LyricsFoundEvent(LyraEvent):
@@ -265,7 +241,6 @@ class LyricsFoundEvent(LyraEvent):
         self.track: Track | None = player._current
         self.lyrics: Lyrics = Lyrics(data)
 
-        # on_lyra_lyrics_found(player, track, lyrics)
         self.handler_args = self.player, self.track, self.lyrics
 
     def __repr__(self) -> str:
@@ -283,7 +258,6 @@ class LyricsNotFoundEvent(LyraEvent):
         self.player: Player = player
         self.track: Track | None = player._current
 
-        # on_lyra_lyrics_unavailable(player, track)
         self.handler_args = self.player, self.track
 
     def __repr__(self) -> str:
@@ -315,7 +289,6 @@ class LyricsLineEvent(LyraEvent):
             duration=(raw_duration / 1000.0) if raw_duration else None,
         )
 
-        # on_lyra_lyrics_update(player, track, line)
         self.handler_args = self.player, self.track, self.line
 
     def __repr__(self) -> str:
@@ -336,7 +309,6 @@ class NodeConnectedEvent(LyraEvent):
         self.is_nodelink: bool = is_nodelink
         self.reconnect: bool = reconnect
 
-        # on_lyra_node_connected(node_id, is_nodelink, reconnect)
         self.handler_args = self.node_id, self.is_nodelink, self.reconnect
 
     def __repr__(self) -> str:
@@ -357,7 +329,6 @@ class NodeDisconnectedEvent(LyraEvent):
         self.is_nodelink: bool = is_nodelink
         self.player_count: int = player_count
 
-        # on_lyra_node_disconnected(node_id, is_nodelink, player_count)
         self.handler_args = self.node_id, self.is_nodelink, self.player_count
 
     def __repr__(self) -> str:
@@ -378,7 +349,6 @@ class NodeReconnectingEvent(LyraEvent):
         self.is_nodelink: bool = is_nodelink
         self.retry_in: float = retry_in
 
-        # on_lyra_node_reconnecting(node_id, is_nodelink, retry_in)
         self.handler_args = self.node_id, self.is_nodelink, self.retry_in
 
     def __repr__(self) -> str:
@@ -396,7 +366,6 @@ class PlayerCreatedEvent(LyraEvent):
         self.player: Player = player
         self.guild_id: int = int(data.get("guildId", 0))
 
-        # on_lyra_player_created(player, guild_id)
         self.handler_args = self.player, self.guild_id
 
     def __repr__(self) -> str:
@@ -414,7 +383,6 @@ class VolumeChangedEvent(LyraEvent):
         self.player: Player = player
         self.volume: int = data.get("volume", 100)
 
-        # on_lyra_volume_changed(player, volume)
         self.handler_args = self.player, self.volume
 
     def __repr__(self) -> str:
@@ -432,7 +400,6 @@ class PlayerConnectedEvent(LyraEvent):
         self.player: Player = player
         self.voice: dict[str, Any] = data.get("voice", {})
 
-        # on_lyra_player_connected(player, voice)
         self.handler_args = self.player, self.voice
 
     def __repr__(self) -> str:
@@ -450,7 +417,6 @@ class FiltersChangedEvent(LyraEvent):
         self.player: Player = player
         self.filters: dict[str, Any] = data.get("filters", {})
 
-        # on_lyra_filters_changed(player, filters)
         self.handler_args = self.player, self.filters
 
     def __repr__(self) -> str:
@@ -524,7 +490,6 @@ class MixStartedEvent(LyraEvent):
         else:
             self.track = None
 
-        # on_lyra_mix_started(player, mix_id, track, volume)
         self.handler_args = (self.player, self.mix_id, self.track, self.volume)
 
     def __repr__(self) -> str:
@@ -560,7 +525,6 @@ class MixEndedEvent(LyraEvent):
         self.mix_id: str = data.get("mixId", "")
         self.reason: MixEndReason = MixEndReason(data.get("reason", "FINISHED"))
 
-        # on_lyra_mix_ended(player, mix_id, reason)
         self.handler_args = (self.player, self.mix_id, self.reason)
 
     @property

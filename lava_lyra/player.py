@@ -359,7 +359,7 @@ class Player(VoiceProtocolType):
 
     def _adjust_end_time(self) -> str | int | None:
         if self._node._version >= LavalinkVersion(4, 0, 0) or (
-            self._node._is_nodelink and self._node._version >= LavalinkVersion(3, 0, 0)
+            self._node._is_nodelink and self._node._version >= LavalinkVersion(3, 2, 0)
         ):
             return None
 

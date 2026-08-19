@@ -356,13 +356,18 @@ class Node:
             self._log.debug(f"Parsed Lavalink version: {major}.{minor}.{fix}")
         self._version = LavalinkVersion(major=major, minor=minor, fix=fix)
 
-        if (not self._is_nodelink and self._version < LavalinkVersion(4, 2, 0)) or (
-            self._is_nodelink and self._version < LavalinkVersion(3, 0, 0)
-        ):
+        if not self._is_nodelink and self._version < LavalinkVersion(4, 2, 0):
             self._available = False
             raise LavalinkVersionIncompatible(
                 "The Lavalink version you're using is incompatible. "
                 "Lavalink version 4.2.0 or above is required to use this library.",
+            )
+
+        if self._is_nodelink and self._version < LavalinkVersion(3, 2, 0):
+            self._available = False
+            raise LavalinkVersionIncompatible(
+                "The NodeLink version you're using is incompatible. "
+                "NodeLink version 3.2.0 or above is required to use this library.",
             )
 
     async def _handle_node_switch(self) -> None:
