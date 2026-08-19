@@ -338,6 +338,12 @@ Your `Track` object must be in the queue if you want to jump to it. Make sure yo
 
 :::
 
+:::{important}
+
+Raises `QueueException` if the queue is currently looping a single track (`LoopMode.TRACK`).
+
+:::
+
 After running this function, any items before the specified item will be removed, effectively "jumping" to the specified item in the queue. The next item obtained using `Queue.get()` will be your specified track.
 
 ## Clearing the queue

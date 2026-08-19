@@ -198,9 +198,9 @@ Instead of removing and re-adding a filter to change its values, you can edit it
 my_filter = lava_lyra.LowPass(tag="lowpass", smoothing=15.0)
 await player.add_filter(_filter=my_filter)
 
-# Later, tweak just the smoothing value:
-my_filter.update(smoothing=25.0)
-await player.add_filter(_filter=my_filter, fast_apply=True)
+# Later, build the updated filter and swap it in with the same tag:
+updated_filter = lava_lyra.LowPass(tag="lowpass", smoothing=15.0).update(smoothing=25.0)
+await player.edit_filter(filter_tag="lowpass", edited_filter=updated_filter, fast_apply=True)
 ```
 
 Passing an unknown parameter name raises `FilterInvalidArgument`.

@@ -322,7 +322,7 @@ lavalink:
   plugins:
     # Required for YouTube support
     - dependency: "dev.lavalink.youtube:youtube-plugin:x.y.z"
-    - repository: "https://maven.lavalink.dev/releases"
+      repository: "https://maven.lavalink.dev/releases"
 
     # Required for Spotify, Apple Music, Deezer, etc.
     - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:x.y.z"
