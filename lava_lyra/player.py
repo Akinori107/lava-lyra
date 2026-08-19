@@ -162,7 +162,6 @@ class Player(VoiceProtocolType):
         "_guild",
         "_is_connected",
         "_last_position",
-        "_last_update",
         "_last_update_local",
         "_log",
         "_lyrics_manager",
@@ -170,7 +169,6 @@ class Player(VoiceProtocolType):
         "_node",
         "_paused",
         "_player_endpoint_uri",
-        "_should_reconnect",
         "_voice_state",
         "_volume",
         "channel",
@@ -203,10 +201,8 @@ class Player(VoiceProtocolType):
         self._volume: int = 100
         self._paused: bool = False
         self._is_connected: bool = False
-        self._should_reconnect: bool = False
 
         self._last_position: int = 0
-        self._last_update: float = 0
         self._last_update_local: float = 0
         self._ending_track: Track | None = None
         self._next_track: Track | None = None
@@ -223,7 +219,7 @@ class Player(VoiceProtocolType):
         )
 
     @property
-    def position(self) -> float:
+    def position(self) -> int:
         """Property which returns the player's position in a track in milliseconds"""
         current = self._current
         if not self.is_playing or current is None:
@@ -266,7 +262,10 @@ class Player(VoiceProtocolType):
 
     @property
     def is_playing(self) -> bool:
-        """Property which returns whether or not the player is actively playing a track."""
+        """Property which returns whether or not the player has a track loaded and connected.
+
+        This stays True while paused — use `Player.is_paused` to check for that separately.
+        """
         return self._is_connected and self._current is not None
 
     @property
@@ -367,7 +366,6 @@ class Player(VoiceProtocolType):
 
     async def _update_state(self, data: dict[str, Any]) -> None:
         state: dict[str, Any] = data.get("state", {})
-        self._last_update = int(state.get("time", 0))
         self._last_update_local = time.time() * 1000
         self._is_connected = bool(state.get("connected"))
         self._last_position = int(state.get("position", 0))
@@ -724,7 +722,6 @@ class Player(VoiceProtocolType):
             self._current = track
 
             self._last_position = start
-            self._last_update = time.time() * 1000
             self._last_update_local = time.time() * 1000
 
         # Remove preloaded filters if last track had any
@@ -940,7 +937,8 @@ class Player(VoiceProtocolType):
         return self._filters
 
     async def reset_filters(self, *, fast_apply: bool = False) -> None:
-        """Resets all currently applied filters to their default parameters.
+        """Removes all currently applied filters entirely (not reset to their defaults — use
+        `Filter.reset()` per-filter if that's what you want).
          You must have filters applied in order for this to work.
          If you would like the filters to be removed instantly, set the `fast_apply` arg to `True`.
 

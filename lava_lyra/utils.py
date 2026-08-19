@@ -445,7 +445,12 @@ class NodeHealthMonitor:
         return self._circuit_open
 
     def check_circuit_breaker(self) -> None:
-        """Check and update circuit breaker state."""
+        """Open the circuit breaker if consecutive failures reached the threshold.
+
+        This can only open the circuit, never close it — closing happens via
+        `record_success()`, or lazily the next time `is_circuit_open` is read
+        after `circuit_timeout` has elapsed.
+        """
         if self._quality_tracker.consecutive_failures >= self._circuit_breaker_threshold:
             if not self._circuit_open:
                 self._circuit_open = True

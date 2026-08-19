@@ -7,13 +7,17 @@ Here are some common causes, in order of likelihood:
 - The `host`/`port` passed to `NodePool.create_node()` don't match where your node is
   actually listening — for example using `localhost` when the node is in a Docker
   container on a different network.
-- The `password` passed to `create_node()` doesn't match the `password` set in your
-  node's `application.yml` (Lavalink) or `config.js`/`config.ts` (NodeLink).
 - The node is reachable but a firewall, VPN, or Docker network rule is blocking the
   connection.
 
 If you don't have a Lavalink node yet, download it [here.](https://github.com/lavalink-devs/Lavalink/releases/latest)
-For everything else, double-check the values above against your node's config and logs first — most "Cannot connect to host" errors come from a host/port/password mismatch.
+For everything else, double-check the values above against your node's config and logs first — most "Cannot connect to host" errors come from a host/port mismatch or the node not running.
+
+:::{note}
+
+A `password` mismatch doesn't raise this error — it raises a separate `NodeConnectionFailure` with the message "The password for node '...' is invalid".
+
+:::
 
 > What experience do I need?
 

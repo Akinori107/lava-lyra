@@ -167,13 +167,6 @@ class LyricsManager:
         if self._log:
             self._log.debug("Lyrics state has been reset")
 
-    def update_lyrics(self, data: dict[str, Any]) -> None:
-        """Update lyrics data"""
-        self._lyrics = Lyrics(data)
-        self._lyrics_loaded = True
-        if self._log:
-            self._log.debug(f"Lyrics updated: {len(self._lyrics.lines)} lines")
-
     def mark_not_found(self) -> None:
         """Mark lyrics as not found"""
         self._lyrics = None

@@ -39,8 +39,8 @@ There are also properties the `Player` class has to access certain values:
   - Returns the bot associated with this player instance.
 
 * - `Player.current`
-  - `Track`
-  - Returns the currently playing track.
+  - `Optional[Track]`
+  - Returns the currently playing track, or `None` if nothing is loaded.
 
 * - `Player.filters`
   - `Filters`
@@ -64,14 +64,14 @@ There are also properties the `Player` class has to access certain values:
 
 * - `Player.is_playing`
   - `bool`
-  - Returns whether or not the player is actively playing a track.
+  - Returns whether or not the player has a track loaded and connected. This stays `True` while paused — check `Player.is_paused` separately.
 
 * - `Player.node`
   - `Node`
   - Returns the node the player is connected to.
 
 * - `Player.position`
-  - `float`
+  - `int`
   - Returns the player’s position in a track in milliseconds.
 
 * - `Player.adjusted_position`
@@ -302,7 +302,13 @@ To disconnect a player from its voice channel without destroying it on the node,
 await Player.disconnect()
 ```
 
-After you have initialized your function, you can optionally include the `force` parameter, which is a boolean. If this is set to `True`, it'll disconnect the player even if the underlying voice client already considers itself disconnected.
+`Player.disconnect()` also accepts an optional `force` parameter, which is a boolean.
+
+:::{note}
+
+`force` is currently accepted but not read anywhere internally — passing `force=True` has no effect on current behavior.
+
+:::
 
 ```py
 
@@ -377,7 +383,13 @@ await Player.play(
 
 ```
 
-After running this function, it should return the `Track` you specified when running the function. This means the track is now playing.
+After running this function, it should return the `Track` you specified when running the function.
+
+:::{note}
+
+The track isn't necessarily playing immediately after this returns: with `gapless=True` it's queued as the *next* track rather than started right away, and if the node isn't currently available `play()` waits a second and returns the track without ever sending the play request.
+
+:::
 
 
 ### Seeking to a position
@@ -617,7 +629,7 @@ After running this function, you should see your currently playing track sound d
 
 ### Resetting all filters
 
-To reset all filters, we need to use `Player.reset_filters()`
+To reset all filters, we need to use `Player.reset_filters()`. Note that this removes every filter entirely, rather than resetting each one to its own default parameters — for that, use `Filter.reset()` on an individual filter instead.
 
 ```py
 await Player.reset_filters()

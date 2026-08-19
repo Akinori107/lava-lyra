@@ -5,7 +5,6 @@ __all__ = (
     "LavalinkVersionIncompatible",
     "LyraException",
     "NoNodesAvailable",
-    "NodeConnectionClosed",
     "NodeConnectionFailure",
     "NodeCreationError",
     "NodeException",
@@ -15,7 +14,6 @@ __all__ = (
     "QueueEmpty",
     "QueueException",
     "QueueFull",
-    "RequirementNotFound",
     "TrackInvalidPosition",
     "TrackLoadError",
     # Removed in v4: Platform-specific client exceptions
@@ -38,10 +36,6 @@ class NodeCreationError(NodeException):
 
 class NodeConnectionFailure(NodeException):
     """There was a problem while connecting to the node."""
-
-
-class NodeConnectionClosed(NodeException):
-    """The node's connection is closed."""
 
 
 class NodeRestException(NodeException):
@@ -98,14 +92,6 @@ class LavalinkVersionIncompatible(LyraException):
     """Lavalink version is incompatible.
 
     Lyra requires Lavalink v4.2.0+ or NodeLink v3.2.0+. Lavalink v3.x is not supported.
-    """
-
-
-class RequirementNotFound(LyraException):
-    """Couldn't found any of discord packages.
-
-    Neither discord.py nor py-cord could be found.
-    Please install one of them before using.
     """
 
 

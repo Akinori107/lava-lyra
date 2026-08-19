@@ -141,7 +141,7 @@ The `Lyrics` object has the following properties:
 
 * - `provider`
   - `Optional[str]`
-  - The provider of the lyrics (Lavalink format).
+  - The provider of the lyrics. Set by both the Lavalink and NodeLink parsing paths.
 
 * - `text`
   - `Optional[str]`

@@ -167,19 +167,15 @@ After running the function, it should return the position of the track as an int
 
 ### Getting track with its index
 
-If you have the index of the track and want to get the `Track` object, you first need to get the raw queue list:
-
-```py
-queue = Queue.get_queue()
-```
-
-After you have your queue, you can use basic list splicing to get the track object:
+If you have the index of the track and want to get the `Track` object, you can index directly into the `Queue` object itself — you don't need to call `Queue.get_queue()` first:
 
 ```py
 
-track = queue[<index>]
+track = Queue[<index>]
 
 ```
+
+Slicing works too (`Queue[start:end]`), returning a `list[Track]`.
 
 ## Getting the next track in the queue
 
@@ -309,7 +305,7 @@ Queue.disable_loop()
 
 :::{important}
 
-You must have a loop mode set before using this function. It will **not work** if you do not have a loop mode set
+Raises `QueueException` if you do not have a loop mode set.
 
 :::
 

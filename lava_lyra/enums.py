@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import ClassVar, override
+from typing import override
 
 __all__ = (
     "LavaSearchType",
@@ -269,8 +269,6 @@ class URLRegex:
 
     URLRegex.YOUTUBE_URL returns the Youtube URL Regex.
 
-    URLRegex.YOUTUBE_PLAYLIST returns the Youtube Playlist Regex.
-
     URLRegex.YOUTUBE_TIMESTAMP returns the Youtube Timestamp Regex.
 
     URLRegex.AM_URL returns the Apple Music URL Regex.
@@ -280,22 +278,6 @@ class URLRegex:
     URLRegex.BASE_URL returns the standard URL Regex.
 
     """
-
-    YTDLP_SUPPORTED_URLS: ClassVar[list[re.Pattern[str]]] = [
-        # Bilibili
-        # re.compile(r"https?://(?:www\.)?bilibili\.com/video/[a-zA-Z0-9]+"),
-        # re.compile(r"https?://b23\.tv/[a-zA-Z0-9]+"),
-        # re.compile(r"https?://(?:m\.)?bilibili\.com/video/[a-zA-Z0-9]+"),
-        # Facebook
-        re.compile(r"https?://(?:www\.)?facebook\.com/.*/videos/\d+"),
-        re.compile(r"https?://(?:www\.)?facebook\.com/watch/\?v=\d+"),
-        re.compile(r"https?://fb\.watch/[a-zA-Z0-9_-]+"),
-        re.compile(r"https?://(?:www\.)?facebook\.com/share/v/[a-zA-Z0-9]+"),
-        re.compile(r"https?://(?:www\.)?facebook\.com/reel/\d+"),
-        re.compile(r"https?://(?:www\.)?facebook\.com/(?:watch|video).*[?&]v=\d+"),
-        # Instagram
-        re.compile(r"https?://(?:www\.)?instagram\.com/(?:p|reel|tv)/[a-zA-Z0-9_-]+"),
-    ]
 
     BILIBILI_URL = re.compile(
         r"^https?://(?:(?:www|m)\.)?(?:bilibili\.com|b23\.tv)/(?P<type>video|audio)/(?P<id>(?:(?P<audioType>am|au|av)?(?P<audioId>[0-9]+))|[A-Za-z0-9]+)/?(?:\?.*)?$"
@@ -315,10 +297,6 @@ class URLRegex:
         r"(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$",
     )
 
-    YOUTUBE_PLAYLIST_URL = re.compile(
-        r"^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))/playlist\?list=.*",
-    )
-
     YOUTUBE_TIMESTAMP = re.compile(
         r"(?P<video>^.*?)(\?t|&t|&start)=(?P<time>\d+)?.*",
     )
@@ -328,24 +306,9 @@ class URLRegex:
         r"(?P<type>album|playlist|song|artist)/(?P<name>.+?)/(?P<id>[^/?]+?)(?:/)?(?:\?.*)?$",
     )
 
-    AM_SINGLE_IN_ALBUM_REGEX = re.compile(
-        r"https?://music\.apple\.com/(?P<country>[a-zA-Z]{2})/(?P<type>album|playlist|song|artist)/"
-        r"(?P<name>.+)/(?P<id>[^/?]+)(\?i=)(?P<id2>[^&]+)(?:&.*)?$",
-    )
-
     SOUNDCLOUD_URL = re.compile(
         r"((?:https?:)?\/\/)?((?:www|m)\.)?soundcloud.com\/.*/.*",
     )
-
-    SOUNDCLOUD_PLAYLIST_URL = re.compile(
-        r"^(https?:\/\/)?(www.)?(m\.)?soundcloud\.com\/.*/sets/.*",
-    )
-
-    SOUNDCLOUD_TRACK_IN_SET_URL = re.compile(
-        r"^(https?:\/\/)?(www.)?(m\.)?soundcloud\.com/[a-zA-Z0-9-._]+/[a-zA-Z0-9-._]+(\?in)",
-    )
-
-    LAVALINK_SEARCH = re.compile(r"(?P<type>ytm?|sc)search:")
 
     BASE_URL = re.compile(r"https?://(?:www\.)?.+")
 

@@ -272,7 +272,7 @@ and backs the `NodeAlgorithm.by_health` selection algorithm. It has a few things
   - `bool` property. `True` if the circuit breaker has tripped (the node is being treated as unhealthy and temporarily skipped).
 
 * - `NodeHealthMonitor.check_circuit_breaker()`
-  - Re-evaluates whether the circuit breaker should open or close based on recent failures.
+  - Opens the circuit breaker if consecutive failures reached the threshold. This can only open the circuit — closing happens via `record_success()`, or lazily the next time `is_circuit_open` is read after the timeout has elapsed.
 
 * - `NodeHealthMonitor.record_success()`
   - Records a successful request/operation against the node, improving its health score over time.

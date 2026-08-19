@@ -80,7 +80,6 @@ class Node:
         "_identifier",
         "_is_nodelink",
         "_latency_cache",
-        "_latency_cache_time",
         "_latency_task",
         "_log",
         "_loop",
@@ -174,7 +173,6 @@ class Node:
         self._version: LavalinkVersion = LavalinkVersion(0, 0, 0)
 
         self._latency_cache: float | None = None
-        self._latency_cache_time: float = 0.0
         self._latency_task: asyncio.Task[Any] | None = None
 
         self._stats: NodeStats = NodeStats(
@@ -280,7 +278,6 @@ class Node:
                     Ping(self._host, port=self._port).get_ping,
                 )
                 self._latency_cache = value
-                self._latency_cache_time = time.monotonic()
             except asyncio.CancelledError:
                 raise
             except Exception:
