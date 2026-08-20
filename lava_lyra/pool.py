@@ -278,6 +278,7 @@ class Node:
                     Ping(self._host, port=self._port).get_ping,
                 )
                 self._latency_cache = value
+                self._health_monitor.quality_tracker.record_latency(value)
             except asyncio.CancelledError:
                 raise
             except Exception:

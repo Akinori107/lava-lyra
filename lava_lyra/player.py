@@ -516,9 +516,10 @@ class Player(VoiceProtocolType):
     ) -> list[Track] | Playlist | None:
         """Fetches tracks from the node's REST api to parse into Lavalink.
 
-        If you passed in Spotify API credentials when you created the node,
-        you can also pass in a Spotify URL of a playlist, album or track and it will be parsed
-        accordingly.
+        In Lavalink v4, all platform support is handled by server-side plugins.
+        Spotify, Apple Music, Deezer, etc. URLs are passed directly to Lavalink
+        which uses plugins like LavaSrc to handle them — no credentials are
+        needed in Lyra itself.
 
         You can pass in a discord.py Context object to get a
         Context object on any track you search.

@@ -24,6 +24,15 @@ class CustomPlayer(Player):
         self.queue = Queue()
 ```
 
+`Queue()` accepts two optional keyword arguments:
+
+- `max_size` (`int | None`) — caps the number of tracks the queue can hold. `None` (default) means unlimited.
+- `overflow` (`bool`) — when `max_size` is set and the queue is full: if `True` (default), the oldest track is dropped to make room; if `False`, `QueueFull` is raised instead.
+
+```py
+self.queue = Queue(max_size=100, overflow=False)
+```
+
 There are also properties the `Queue` class has to access certain values:
 
 :::{list-table}

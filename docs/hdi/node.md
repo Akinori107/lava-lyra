@@ -11,6 +11,7 @@ The `Node` class has a couple functions you will be using frequently:
 - `Node.enable()`
 - `Node.disable()`
 - `Node.disconnect()`
+- `Node.send()`
 - `Node.load_search()`
 
 
@@ -228,6 +229,12 @@ Enabling a node reconnects it if it isn't already connected, so it can be select
 
 To fully disconnect a node and remove it from the pool (destroying any players connected to
 it in the process), use `Node.disconnect()`
+
+## Sending raw requests
+
+`Node.send()` is a low-level escape hatch that issues a raw HTTP request to the node's
+REST API (`method`, `path`, `guild_id`, `data`, etc.), for hitting endpoints Lyra doesn't
+wrap yet. Most users won't need this — prefer the typed methods on `Node`/`Player` instead.
 
 ```py
 await Node.disconnect()

@@ -14,9 +14,10 @@ Lyrics support requires either:
 :::{important}
 
 You must also pass `lyrics=True` to `NodePool.create_node()` when adding the node. It defaults
-to `False`, and every method on this page (`fetch_lyrics()`, `subscribe_lyrics()`, etc.) will
-silently return `None`/`False` without raising an error if lyrics support isn't enabled on the
-node. You can check this at any time with `Node.lyrics_enabled`.
+to `False`, and every method on this page will silently no-op without raising an error if lyrics
+support isn't enabled on the node: `fetch_lyrics()` returns `None`, `subscribe_lyrics()` and
+`unsubscribe_lyrics()` return `False`, and `get_current_lyrics_lines()` returns `[]`. You can
+check this at any time with `Node.lyrics_enabled`.
 
 :::
 

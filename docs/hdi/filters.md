@@ -211,6 +211,15 @@ To reset a filter back to its default parameter values (while keeping its `tag`)
 my_filter.reset()
 ```
 
+:::{warning}
+
+`Equalizer.reset()` is a no-op. `Equalizer`'s only parameter, `levels`, has no default value
+(it's required), so there's nothing for `Filter.reset()` to fall back to — it leaves the current
+`levels` untouched. To reset an EQ, replace it instead: `Equalizer.flat()` gives you a neutral
+15-band EQ you can pass to `Player.edit_filter()`.
+
+:::
+
 Both `update()` and `reset()` mutate the filter in place and return `self`, so you can chain them.
 
 ## Adding a filter

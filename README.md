@@ -270,7 +270,6 @@ async def search(interaction, query: str, platform: str = "youtube"):
             lava_lyra.LavaSearchType.TEXT,
         ],
         search_type=search_types.get(platform, lava_lyra.SearchType.ytsearch),
-        # ctx=ctx    # ctx in discord.py interaction could be "None"
     )
 
     if not result:
@@ -431,7 +430,7 @@ This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICEN
 **Lyra** is based on the excellent [**Pomice**](https://github.com/cloudwithax/pomice) library:
 
 - **Original Pomice**: Copyright (c) 2023, [cloudwithax](https://github.com/cloudwithax)
-- **Lyra (Lavalink v4 refactor)**: Copyright (c) 2026, [ParrotXray](https://github.com/ParrotXray)
+- **Lyra**: Copyright (c) 2026, [ParrotXray](https://github.com/ParrotXray)
 
 We extend our heartfelt thanks to **cloudwithax** and all Pomice contributors for creating the solid foundation that made Lyra possible. This project builds upon their excellent work to provide Lavalink v4 compatibility and modern server-side plugin support.
 

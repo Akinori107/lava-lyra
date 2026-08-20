@@ -123,7 +123,7 @@ class SearchManager:
         Example:
             ```python
             # Search YouTube for tracks and albums
-            result = await search_manager.load_search(
+            result = await node.load_search(
                 query="architects animals",
                 types=[LavaSearchType.TRACK, LavaSearchType.ALBUM],
                 search_type=SearchType.ytsearch,
@@ -131,7 +131,7 @@ class SearchManager:
             )
 
             # Search Spotify
-            result = await search_manager.load_search(
+            result = await node.load_search(
                 query="metallica",
                 types=[LavaSearchType.TRACK, LavaSearchType.ARTIST],
                 search_type=SearchType.spsearch,

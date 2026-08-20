@@ -20,9 +20,9 @@ __all__ = (
 
 class SearchType(Enum):
     """
-    The enum for the different search types for Lyra.
-    This feature is exclusively for the Spotify search feature of Lyra.
-    If you are not using this feature, this class is not necessary.
+    The enum for the different search/recommendation prefixes Lavalink search plugins
+    understand. Used as the `search_type` param on `Node.get_tracks()` / `Player.get_tracks()`
+    / `Node.load_search()` for any source, not just Spotify.
 
     SearchType.ytsearch searches using regular Youtube,
     which is best for all scenarios.
@@ -156,10 +156,6 @@ class PlaylistType(Enum):
     def _missing_(cls, value: object) -> PlaylistType:
         return cls.OTHER
 
-    @property
-    def none(self) -> None:
-        return None
-
     def __str__(self) -> str:
         return str(self.value)
 
@@ -261,7 +257,9 @@ class RouteIPType(Enum):
 
 class URLRegex:
     """
-    The enum for all the URL Regexes in use by Lyra.
+    A namespace class holding all the compiled URL regexes used by Lyra.
+
+    URLRegex.BILIBILI_URL returns the Bilibili URL Regex.
 
     URLRegex.SPOTIFY_URL returns the Spotify URL Regex.
 

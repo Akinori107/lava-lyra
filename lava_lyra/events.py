@@ -42,18 +42,20 @@ class LyraEvent(ABC):
     """The base class for all events dispatched by a node.
 
     Every event must be formatted within your bot's code as a listener.
-    For example, to listen for when a track starts.
+    For example, to listen for when a track starts. Each event's
+    `handler_args` determine the positional arguments your listener
+    receives — for `on_lyra_track_start`, that's `(player, track)`.
 
     py-cord::
 
         @bot.listen()
-        async def on_lyra_track_start(self, event):
+        async def on_lyra_track_start(self, player, track):
             pass
 
     discord.py::
 
         @bot.event
-        async def on_lyra_track_start(event):
+        async def on_lyra_track_start(player, track):
             pass
     """
 
@@ -209,7 +211,8 @@ class WebSocketClosedPayload:
 
 
 class WebSocketClosedEvent(LyraEvent):
-    """Fired when a websocket connection to a node has been closed.
+    """Fired when the Discord voice websocket for a guild has been closed
+    (relayed by the node, not the node's own connection).
     Returns a WebSocketClosedPayload with the guild, close code, reason,
     and whether the close was remote.
     """

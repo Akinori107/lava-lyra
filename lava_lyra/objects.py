@@ -198,6 +198,6 @@ class Playlist:
         return self._thumbnail
 
     @property
-    def length(self) -> int | None:
+    def length(self) -> int:
         """Returns the total length of all tracks in the playlist in milliseconds."""
         return sum(track.length or 0 for track in self.tracks)
