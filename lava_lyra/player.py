@@ -940,8 +940,8 @@ class Player(VoiceProtocolType):
     async def reset_filters(self, *, fast_apply: bool = False) -> None:
         """Removes all currently applied filters entirely (not reset to their defaults — use
         `Filter.reset()` per-filter if that's what you want).
-         You must have filters applied in order for this to work.
-         If you would like the filters to be removed instantly, set the `fast_apply` arg to `True`.
+        You must have filters applied in order for this to work.
+        If you would like the filters to be removed instantly, set the `fast_apply` arg to `True`.
 
         (You must have a song playing in order for `fast_apply` to work.)
         """

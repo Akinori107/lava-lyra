@@ -1,5 +1,5 @@
 ```{eval-rst}
-Search
+Search Module
 --------------------
 
 .. automodule:: lava_lyra.search

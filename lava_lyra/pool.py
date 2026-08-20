@@ -1125,7 +1125,7 @@ class Node:
         Gets recommendations for a track.
 
         In Lavalink v4, recommendations are handled by plugins.
-        For Spotify/Deezer/Tidal/JioSaavn tracks, use the matching '*rec:' search prefix.
+        For Spotify/Deezer/Tidal/JioSaavn tracks, use the matching '\\*rec:' search prefix.
         For YouTube tracks, use the autoplay/radio playlist.
 
         Args:
