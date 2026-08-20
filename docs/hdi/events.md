@@ -45,7 +45,7 @@ All track-related events carry a `Player` object and a `Track` object.
 
 ### Websocket events
 
-- `on_lyra_websocket_closed(payload)` — Fired when the websocket connection is closed. `payload` contains the `Guild`, close code, reason, and whether the close was remote.
+- `on_lyra_websocket_closed(payload)` — Fired when the websocket connection is closed. `payload` is a `WebSocketClosedPayload` object with `guild`, `code`, `reason`, and `by_remote` attributes.
 
 ### Lyrics events
 

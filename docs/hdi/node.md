@@ -8,6 +8,7 @@ The `Node` class has a couple functions you will be using frequently:
 - `Node.get_tracks()`
 - `Node.get_recommendations()`
 - `Node.build_track()`
+- `Node.connect()`
 - `Node.enable()`
 - `Node.disable()`
 - `Node.disconnect()`
@@ -207,6 +208,20 @@ await Node.build_track(
 
 ```
 
+## Connecting a node
+
+`NodePool.create_node()` already calls `Node.connect()` for you, so most of the time you won't
+call this directly.
+
+```py
+await Node.connect()
+```
+
+The `reconnect` kwarg is for Lyra's own internal reconnect loop — it skips the initial
+version/handshake check since the node was already validated on first connect. You won't
+need to pass it yourself; to manually bring a disconnected node back, use `Node.enable()`
+instead (see below).
+
 ## Enabling and disabling a node
 
 To temporarily take a node out of rotation without removing it from the pool, we use
@@ -289,9 +304,6 @@ and backs the `NodeAlgorithm.by_health` selection algorithm. It has a few things
 
 * - `NodeHealthMonitor.record_reconnection()`
   - Records that the node reconnected after a disconnect, factored into its stability score.
-
-* - `NodeHealthMonitor.should_health_check()`
-  - Returns whether it's time to run another health check on the node, based on the configured `health_check_interval`.
 
 * - `NodeHealthMonitor.quality_tracker`
   - The underlying tracker object used to compute connection-quality statistics.

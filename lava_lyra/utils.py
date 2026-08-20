@@ -409,20 +409,15 @@ class NodeHealthMonitor:
         "_circuit_open",
         "_circuit_open_time",
         "_circuit_timeout",
-        "_health_check_interval",
-        "_last_health_check",
         "_quality_tracker",
     )
 
     def __init__(
         self,
-        health_check_interval: float = 30.0,
         circuit_breaker_threshold: int = 5,
         circuit_timeout: float = 60.0,
     ) -> None:
         self._quality_tracker = ConnectionQualityTracker()
-        self._last_health_check: float = 0.0
-        self._health_check_interval: float = health_check_interval
         self._circuit_breaker_threshold: int = circuit_breaker_threshold
         self._circuit_open: bool = False
         self._circuit_open_time: float = 0.0
@@ -521,14 +516,6 @@ class NodeHealthMonitor:
         )
 
         return health_score
-
-    def should_health_check(self) -> bool:
-        """Determine if a health check should be performed."""
-        current_time = time.time()
-        if current_time - self._last_health_check >= self._health_check_interval:
-            self._last_health_check = current_time
-            return True
-        return False
 
 
 def voice_field(data: Any, key: str) -> Any:

@@ -148,10 +148,9 @@ class Filters:
 
 class Player(VoiceProtocolType):
     """The base player class for Lyra.
-    In order to initiate a player, you must pass it in as a cls when you connect to a channel.
-    i.e: ```py
-    await ctx.author.voice.channel.connect(cls=lyra.Player)
-    ```
+    In order to initiate a player, you must pass it in as a cls when you connect to a channel::
+
+        await ctx.author.voice.channel.connect(cls=lyra.Player)
     """
 
     __slots__ = (
@@ -329,6 +328,11 @@ class Player(VoiceProtocolType):
     def lyrics_loaded(self) -> bool:
         """Check if lyrics have been attempted to load"""
         return self._lyrics_manager.lyrics_loaded
+
+    @property
+    def is_subscribed(self) -> bool:
+        """Check if subscribed to live lyrics"""
+        return self._lyrics_manager.is_subscribed
 
     # Lyrics-related methods (acting as proxies to LyricsManager)
     async def fetch_lyrics(

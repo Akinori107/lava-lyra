@@ -134,7 +134,6 @@ class Node:
         search: bool = False,
         fallback: bool = False,
         logger: logging.Logger | None = None,
-        health_check_interval: float = 30.0,
         circuit_breaker_threshold: int = 5,
         circuit_timeout: float = 60.0,
         connect_timeout: float = 10.0,
@@ -192,7 +191,6 @@ class Node:
         self._search_enabled: bool = search
         self._backoff: ExponentialBackoff = ExponentialBackoff(base=7)
         self._health_monitor: NodeHealthMonitor = NodeHealthMonitor(
-            health_check_interval=health_check_interval,
             circuit_breaker_threshold=circuit_breaker_threshold,
             circuit_timeout=circuit_timeout,
         )
@@ -1325,7 +1323,6 @@ class NodePool(metaclass=_NodePoolMeta):
         search: bool = False,
         fallback: bool = False,
         logger: logging.Logger | None = None,
-        health_check_interval: float = 30.0,
         circuit_breaker_threshold: int = 5,
         circuit_timeout: float = 60.0,
         connect_timeout: float = 10.0,
@@ -1338,7 +1335,6 @@ class NodePool(metaclass=_NodePoolMeta):
         application.yml file instead of passing credentials to the client.
 
         Health Monitor Parameters:
-            health_check_interval (float): Interval in seconds between health checks. Default: 30.0
             circuit_breaker_threshold (int): Number of consecutive failures before circuit opens. Default: 5
                 For foreign/unstable nodes, consider increasing to 10-20.
             circuit_timeout (float): Seconds to keep circuit open before retry. Default: 60.0
@@ -1373,7 +1369,6 @@ class NodePool(metaclass=_NodePoolMeta):
             search=search,
             fallback=fallback,
             logger=logger,
-            health_check_interval=health_check_interval,
             circuit_breaker_threshold=circuit_breaker_threshold,
             circuit_timeout=circuit_timeout,
             connect_timeout=connect_timeout,

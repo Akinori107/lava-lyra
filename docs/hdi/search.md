@@ -142,6 +142,35 @@ if result:
 
 :::
 
+## The Text object
+
+Each entry in `SearchResult.texts` is a `Text` object, a text-based search suggestion
+returned by the LavaSearch plugin (not a playable track).
+
+:::{list-table}
+:header-rows: 1
+
+* - Attribute
+  - Type
+  - Description
+
+* - `text`
+  - `str`
+  - The suggested search text.
+
+* - `plugin_info`
+  - `dict`
+  - Raw plugin metadata for this suggestion.
+
+:::
+
+`str(text_result)` returns the suggestion text directly, so you can print or send it as-is:
+
+```py
+for suggestion in result.texts:
+    print(suggestion)
+```
+
 ## Example: search and play the first result
 
 ```py

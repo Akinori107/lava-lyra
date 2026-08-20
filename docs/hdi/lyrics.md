@@ -125,6 +125,13 @@ async def on_lyra_lyrics_line(self, player, track, line):
 await player.unsubscribe_lyrics()
 ```
 
+### Checking subscription status
+
+```py
+if player.is_subscribed:
+    print("Currently subscribed to live lyrics")
+```
+
 ## The Lyrics object
 
 The `Lyrics` object has the following properties:

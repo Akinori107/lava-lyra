@@ -100,10 +100,6 @@ After you have initialized your function, we need to fill in the proper paramete
   - `bool`
   - Set this value to `True` to enable lyrics support on this node. Requires a lyrics-capable plugin (or NodeLink) on the server. Default value is `False`.
 
-* - `health_check_interval`
-  - `float`
-  - Interval in seconds between health checks. Default value is `30.0`.
-
 * - `circuit_breaker_threshold`
   - `int`
   - Number of consecutive failures before the circuit breaker opens for this node. Default value is `5`. For foreign/unstable nodes, consider increasing to `10`-`20`.
