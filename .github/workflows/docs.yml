@@ -21,6 +21,11 @@ jobs:
   sphinx:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        extra: ["discord.py", "py-cord"]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
@@ -34,14 +39,14 @@ jobs:
       uses: actions/cache@v5
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-docs-${{ hashFiles('pyproject.toml') }}
+        key: ${{ runner.os }}-pip-docs-${{ matrix.extra }}-${{ hashFiles('pyproject.toml') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
-        pip install -e ".[docs,py-cord]"
+        pip install -e ".[docs,${{ matrix.extra }}]"
 
     - name: Build docs
       run: sphinx-build -W docs docs/_build/html
