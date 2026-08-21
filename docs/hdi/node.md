@@ -2,7 +2,7 @@
 
 The `Node` class is one of the main classes you will be interacting with when using Lyra.
 
-The `Node` class has a couple functions you will be using frequently:
+It has a couple functions you will be using frequently:
 
 - `Node.get_player()`
 - `Node.get_tracks()`
@@ -80,6 +80,57 @@ There are also properties the `Node` class has to access certain values:
 * - `Node.stats`
   - `NodeStats`
   - Returns the nodes stats.
+
+:::
+
+`NodeStats` has the following attributes:
+
+:::{list-table}
+:header-rows: 1
+
+* - Attribute
+  - Type
+  - Description
+
+* - `used`
+  - `Optional[int]`
+  - Memory used by the node.
+
+* - `free`
+  - `Optional[int]`
+  - Free memory available to the node.
+
+* - `reservable`
+  - `Optional[int]`
+  - Reservable memory.
+
+* - `allocated`
+  - `Optional[int]`
+  - Allocated memory.
+
+* - `cpu_cores`
+  - `Optional[int]`
+  - Number of CPU cores available to the node.
+
+* - `cpu_system_load`
+  - `Optional[float]`
+  - System-wide CPU load.
+
+* - `cpu_process_load`
+  - `Optional[float]`
+  - CPU load caused by the node process itself.
+
+* - `players_total`
+  - `Optional[int]`
+  - Total number of players on the node.
+
+* - `players_active`
+  - `Optional[int]`
+  - Number of players currently playing.
+
+* - `uptime`
+  - `Optional[int]`
+  - Node uptime, in milliseconds.
 
 :::
 
@@ -426,6 +477,25 @@ This returns a `RouteStats` object with the following attributes:
 * - `address_index`
   - `Optional[str]`
   - The current address index.
+
+:::
+
+Each entry in `failing_addresses` is a `FailingIPBlock` object:
+
+:::{list-table}
+:header-rows: 1
+
+* - Attribute
+  - Type
+  - Description
+
+* - `address`
+  - `Optional[str]`
+  - The failing address.
+
+* - `failing_time`
+  - `datetime`
+  - When the address was marked as failing.
 
 :::
 

@@ -192,4 +192,5 @@ To disconnect all nodes from the pool, we need to use `NodePool.disconnect()`
 await NodePool.disconnect()
 ```
 
-After running this function, all nodes in the pool should disconnect and no longer be available to use.
+Unlike `Node.disable()`, this is not reversible — every node is removed from the pool entirely
+(destroying any players still connected to them) and must be re-added with `NodePool.create_node()`.

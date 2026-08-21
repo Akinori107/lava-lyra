@@ -2,7 +2,7 @@
 
 The `Player` class is the class you will be interacting with the most within Lyra.
 
-The `Player` class has a couple functions you will be using frequently:
+It has a couple functions you will be using frequently:
 
 - `Player.add_filter()`
 - `Player.build_track()`
