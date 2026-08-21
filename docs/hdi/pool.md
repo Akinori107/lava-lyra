@@ -143,6 +143,15 @@ Platform support (Spotify, Apple Music, Deezer, etc.) is handled entirely by you
 
 :::
 
+:::{important}
+
+Raises `NodeCreationError` if `identifier` is already in use, or if `bot.user` isn't ready yet
+(call this after your bot has logged in). Raises `LavalinkVersionIncompatible` if the node's
+Lavalink/NodeLink version is below the minimum supported. Raises `NodeConnectionFailure` if
+the node can't be reached, or if `password` doesn't match the node's configured password.
+
+:::
+
 Now that you have your Node object created, move on to [Using a node](node.md) to see what you can do with your `Node` object.
 
 ## Getting a node
@@ -160,6 +169,13 @@ NodePool.get_node(identifier="<your id here>")
 ```
 
 If you do not set a identifier, it'll return a random node from the pool.
+
+:::{important}
+
+Raises `NoNodesAvailable` if no nodes are currently available, or if `identifier` doesn't
+match any available node.
+
+:::
 
 :::{tip}
 
@@ -183,6 +199,12 @@ If you want to view what they do, refer to the `NodeAlgorithm` enum in the [](..
 ```py
 NodePool.get_best_node(algorithm=NodeAlgorithm.xyz)
 ```
+
+:::{important}
+
+Raises `NoNodesAvailable` if no nodes are currently available.
+
+:::
 
 ## Disconnecting all nodes from the pool
 

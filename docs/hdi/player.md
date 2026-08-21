@@ -410,6 +410,12 @@ await Player.seek(position=<your pos here>)
 
 After running this function, your currently playing track should seek to your specified position
 
+:::{important}
+
+Raises `TrackInvalidPosition` if `position` is negative or greater than the current track's length.
+
+:::
+
 
 ### Pausing/unpausing the player
 
