@@ -270,6 +270,14 @@ await Player.add_filter(
 
 After running this function, you should see your currently playing track sound different depending on the filter you chose.
 
+:::{important}
+
+Raises `FilterTagAlreadyInUse` if a filter with the same `tag` is already applied. Raises
+`NodelinkExclusive` if `_filter` is a Nodelink-exclusive filter and `node` isn't a Nodelink
+instance.
+
+:::
+
 ## Removing a filter
 
 :::{important}
@@ -318,6 +326,12 @@ await Player.remove_filter(
 
 After running this function, you should see your currently playing track sound different depending on the filter you chose to remove.
 
+:::{important}
+
+Raises `FilterTagInvalid` if no filter with that `filter_tag` is currently applied.
+
+:::
+
 
 ## Resetting all filters
 
@@ -332,6 +346,13 @@ To reset all filters, we need to use `Player.reset_filters()`
 ```py
 await Player.reset_filters()
 ```
+
+:::{important}
+
+Raises `FilterInvalidArgument` if no filters are currently applied — you must have at least one
+filter on the player first.
+
+:::
 
 
 After you have initialized your function, you can optionally include the `fast_apply` parameter, which is a boolean. If this is set to `True`, it'll remove all filters (almost) instantly if theres a track playing.

@@ -159,9 +159,9 @@ No credentials are needed on the client side — configure them in your `applica
 
 :::
 
-
-
-You should get a list of `Track` in return after running this function for you to then do whatever you want with it.
+This returns a `Playlist` if `query` resolved to a playlist, a `list[Track]` for individual
+tracks, or `None` if nothing was found — check which you got with `isinstance()` before
+iterating.
 Ideally, you should be putting all tracks into some sort of a queue. If you would like to learn about how to use
 our queue implementation, you can refer to [](queue.md)
 
@@ -322,7 +322,7 @@ print(f"Circuit open: {node.health_monitor.is_circuit_open}")
 
 ## Getting recommendations
 
-To get recommadations using Lavalink, we need to use `Node.get_recommendations()`
+To get recommendations using Lavalink, we need to use `Node.get_recommendations()`
 
 You can also use `Player.get_recommendations()` to do the same thing, but this can be used to fetch recommendations regardless if a player exists.
 
@@ -360,7 +360,11 @@ await Node.get_recommendations(
 
 ```
 
-You should get a list of `Track` in return after running this function for you to then do whatever you want with it.
+Recommendations are only supported for Spotify, Deezer, Tidal, JioSaavn, and YouTube tracks —
+`Node.get_recommendations()` raises `TrackLoadError` for any other `track_type`. When the source
+is supported, this returns whatever the underlying search would: a `list[Track]`, a `Playlist`
+(e.g. YouTube's autoplay radio can resolve to one), or `None` if the search came back empty —
+check which you got with `isinstance()` before iterating.
 Ideally, you should be putting all tracks into some sort of a queue. If you would like to learn about how to use
 our queue implementation, you can refer to [](queue.md)
 
