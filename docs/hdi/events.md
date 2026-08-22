@@ -27,6 +27,10 @@ Here is the full list of events:
 Here is an example of how you would listen for the `TrackStartEvent` within a cog:
 
 ```py
+import lava_lyra
+from discord.ext import commands
+
+
 @commands.Cog.listener()
 async def on_lyra_track_start(self, player: lava_lyra.Player, track: lava_lyra.Track):
     print(f"Now playing: {track.title}")

@@ -244,6 +244,9 @@ Slicing works too (`queue[start:end]`), returning a `list[Track]`.
 * - `reversed(queue)`
   - Back to front.
 
+* - `str(queue)`
+  - Renders the queue's current contents.
+
 * - `queue[index] = track`, `del queue[index]`
   - Set/delete by index.
 
@@ -428,7 +431,7 @@ single track (`LoopMode.TRACK`).
 
 :::
 
-Under `LoopMode.NONE`, items before the target are removed and `Queue.get()` returns it next.
+When no loop mode is set, items before the target are removed and `Queue.get()` returns it next.
 Under `LoopMode.QUEUE`, nothing is removed — only the internal position pointer moves, so the
 loop continues from there.
 

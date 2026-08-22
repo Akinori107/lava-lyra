@@ -8,6 +8,8 @@ from typing import Any
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath(".."))
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 project = "Lyra"
 copyright = "2026, ParrotXray"
@@ -127,7 +129,7 @@ def linkcode_resolve(domain: str, info: dict[str, Any]) -> str | None:
             return None
         if file is None:
             return None
-        file = os.path.relpath(file, os.path.abspath(".."))
+        file = os.path.relpath(file, ROOT_DIR)
         start, end = lines[1], lines[1] + len(lines[0]) - 1
 
         return f"https://github.com/ParrotXray/lava-lyra/blob/main/{file}#L{start}-L{end}"

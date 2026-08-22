@@ -150,7 +150,7 @@ class Player(VoiceProtocolType):
     """The base player class for Lyra.
     In order to initiate a player, you must pass it in as a cls when you connect to a channel::
 
-        await ctx.author.voice.channel.connect(cls=lyra.Player)
+        await ctx.author.voice.channel.connect(cls=lava_lyra.Player)
     """
 
     __slots__ = (
@@ -176,6 +176,7 @@ class Player(VoiceProtocolType):
 
     def __call__(self, client: BotType, channel: VoiceChannelType) -> Player:
         self.client = client
+        self._bot = client
         self.channel = channel
         self._guild = channel.guild
 
@@ -587,7 +588,8 @@ class Player(VoiceProtocolType):
             raise NodelinkExclusive(
                 "This is a Nodelink-exclusive feature and is not supported on a Lavalink instance"
             )
-        self._current = None
+        if not gapless:
+            self._current = None
         await self._node.send(
             method="PATCH",
             path=self._player_endpoint_uri,

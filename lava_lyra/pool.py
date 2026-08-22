@@ -322,6 +322,7 @@ class Node:
     async def disable(self) -> None:
         """Disable this node and disconnect if connected."""
         self._enabled = False
+        self._available = False
         if self._latency_task:
             self._latency_task.cancel()
         if self.is_connected and self._websocket:

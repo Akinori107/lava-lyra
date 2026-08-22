@@ -560,6 +560,8 @@ await Player.add_filter(
 
 After running this function, you should see your currently playing track sound different depending on the filter you chose.
 
+Raises `FilterTagAlreadyInUse` if a filter with the same `tag` is already applied.
+
 ### Removing a filter
 
 
@@ -602,6 +604,7 @@ await Player.remove_filter(
 
 After running this function, you should see your currently playing track sound different depending on the filter you chose to remove.
 
+Raises `FilterTagInvalid` if no filter with that `filter_tag` is currently applied.
 
 ### Editing a filter
 

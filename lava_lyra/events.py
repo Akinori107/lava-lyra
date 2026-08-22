@@ -206,8 +206,8 @@ class WebSocketClosedPayload:
 
     @property
     def guild(self) -> GuildType | None:
-        """Returns the guild associated with this event.
-        Lazily fetches the guild to avoid circular imports.
+        """Returns the guild associated with this event, resolved lazily
+        from the bot's cache. Returns `None` if uncached.
         """
         if self._bot is None:
             return None

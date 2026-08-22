@@ -200,7 +200,8 @@ NodePool.get_best_node(algorithm=NodeAlgorithm.xyz)
 
 :::{important}
 
-Raises `NoNodesAvailable` if no nodes are currently available.
+Raises `NoNodesAvailable` if no nodes are currently available, or `ValueError` if `algorithm`
+isn't a valid `NodeAlgorithm`.
 
 :::
 

@@ -52,6 +52,12 @@ pip install lava-lyra[py-cord]
 pip install lava-lyra[discord.py]
 ```
 
+For faster networking (aiohttp speedups, aiodns, orjson), install the `speed` extra:
+
+```bash
+pip install lava-lyra[speed]
+```
+
 ## Basic Usage
 
 ### Py-cord Example

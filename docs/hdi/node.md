@@ -212,7 +212,7 @@ No credentials are needed on the client side — configure them in your `applica
 
 This returns a `Playlist` if `query` resolved to a playlist, a `list[Track]` for individual
 tracks, or `None` if nothing was found — check which you got with `isinstance()` before
-iterating.
+iterating. Raises `TrackLoadError` if the node reports a load failure.
 Ideally, you should be putting all tracks into some sort of a queue. If you would like to learn about how to use
 our queue implementation, you can refer to [](queue.md)
 
@@ -330,52 +330,13 @@ responds with a non-2xx status or a non-JSON body.
 If the node has the LavaSearch plugin installed (check `Node.search_enabled`), you can search
 for tracks, albums, artists, playlists, and text in a single call using `Node.load_search()`
 
-After you have initialized your function, we need to fill in the proper parameters:
-
-:::{list-table}
-:header-rows: 1
-
-* - Name
-  - Type
-  - Description
-
-* - `query`
-  - `str`
-  - The string you want to search up.
-
-* - `types`
-  - `List[LavaSearchType]`
-  - Result categories to search for. Raises `ValueError` if empty.
-
-* - `search_type`
-  - `SearchType | None`
-  - Optional search provider. Defaults to Lavalink's configured platform if omitted.
-
-* - `ctx`
-  - `ContextType | None`
-  - Optional value which sets a `Context` object on the tracks you search.
-
-:::
-
 ```py
-result = await Node.load_search(
-    query="<your query here>",
-    types=[<LavaSearchType values here>],
-    search_type=<optional SearchType, defaults to Lavalink's configured search platform if omitted>,
-    ctx=<optional ctx object here>,
-)
+result = await node.load_search(query="<your query here>", types=[<LavaSearchType values here>])
 ```
 
 This returns a `SearchResult` (or `None` if nothing was found) grouping the matched tracks,
-albums, artists, playlists, and text results by type. See [](search.md) for details on
-`SearchResult` and `LavaSearchType`.
-
-:::{important}
-
-Raises `NodeRestException` if the LavaSearch plugin isn't installed on the node or the server
-returns an API error. Raises `ValueError` if `types` is empty.
-
-:::
+albums, artists, playlists, and text results by type. See [](search.md) for the full parameter
+table, `SearchResult`, `LavaSearchType`, and the exceptions this raises.
 
 ## Monitoring node health
 
@@ -498,7 +459,8 @@ await Node.get_recommendations(
 
 ```
 
-Recommendations are only supported for Spotify, Deezer, Tidal, JioSaavn, and YouTube tracks —
+Recommendations are only supported for Spotify, Deezer, Tidal, JioSaavn, YouTube, and YouTube
+Music tracks —
 `Node.get_recommendations()` raises `TrackLoadError` for any other `track_type`, and `TypeError`
 if `track` is `None`. When the source
 is supported, this returns whatever the underlying search would: a `list[Track]`, a `Playlist`

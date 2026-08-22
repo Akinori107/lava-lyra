@@ -119,6 +119,9 @@ if success:
 `subscribe_lyrics()` also accepts `skip_track_source`, sent as a query parameter regardless of node type (unlike `fetch_lyrics()`, it isn't gated to Lavalink v4).
 
 ```py
+from discord.ext import commands
+
+
 @commands.Cog.listener()
 async def on_lyra_lyrics_line(self, player, track, line):
     print(f"[{line.time:.1f}s] {line.text}")
@@ -225,6 +228,9 @@ Each `LyricLine` has:
 :::
 
 ```py
+from discord.ext import commands
+
+
 @commands.Cog.listener()
 async def on_lyra_lyrics_found(self, player, track, lyrics):
     print(f"Lyrics found for {track.title}: {len(lyrics)} lines")
