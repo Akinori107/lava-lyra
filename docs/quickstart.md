@@ -87,7 +87,6 @@ bot.run("token here")
 ```py
 import lava_lyra
 import discord
-import re
 
 from discord.ext import commands
 

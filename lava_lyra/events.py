@@ -161,7 +161,7 @@ class TrackExceptionPayload:
 
 
 class TrackExceptionEvent(LyraEvent):
-    """Fired when a track error has occured.
+    """Fired when a track error has occurred.
     Returns the player associated with the event along with the track and a
     TrackExceptionPayload describing the message, severity, and cause.
     """
@@ -191,7 +191,7 @@ class TrackExceptionEvent(LyraEvent):
 
 class WebSocketClosedPayload:
     """Details from a `WebSocketClosedEvent`. `guild` is resolved lazily
-    from the bot to avoid a circular import, and is `None` if uncached.
+    from the bot's cache on access, and is `None` if uncached.
     `by_remote` is whether Discord's voice servers closed the connection.
     """
 

@@ -19,6 +19,9 @@ support isn't enabled on the node: `fetch_lyrics()` returns `None`, `subscribe_l
 `unsubscribe_lyrics()` return `False`, and `get_current_lyrics_lines()` returns `[]`. You can
 check this at any time with `Node.lyrics_enabled`.
 
+`fetch_lyrics()` also returns `None` on any other failure (network errors, bad response, etc.) —
+it catches everything internally and just logs it. A `None` result isn't only "lyrics disabled".
+
 :::
 
 ## Fetching lyrics for the current track

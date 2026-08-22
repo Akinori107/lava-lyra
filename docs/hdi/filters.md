@@ -109,6 +109,13 @@ Each preset is a classmethod that returns a ready-to-use filter instance, e.g. `
 
 ### Parameter reference
 
+:::{important}
+
+Every filter also takes a keyword-only `tag: str`, required, not listed below since it's shared
+by all filters.
+
+:::
+
 :::{list-table}
 :header-rows: 1
 

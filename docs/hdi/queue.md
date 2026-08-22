@@ -27,7 +27,7 @@ class CustomPlayer(Player):
 `Queue()` accepts two optional keyword arguments:
 
 - `max_size` (`int | None`) — caps the number of tracks the queue can hold. `None` (default) means unlimited.
-- `overflow` (`bool`) — when `max_size` is set and the queue is full: if `True` (default), the oldest track is dropped to make room; if `False`, `QueueFull` is raised instead.
+- `overflow` (`bool`) — when `max_size` is set and the queue is full: if `True` (default), the most recently queued track is dropped to make room; if `False`, `QueueFull` is raised instead.
 
 ```py
 self.queue = Queue(max_size=100, overflow=False)
@@ -112,7 +112,9 @@ Queue.put_at_front(item=<your Track here>)
 
 `put()`, `put_at_index()`, and `put_at_front()` all raise `QueueFull` if the queue was
 constructed with `overflow=False` and `max_size` has been reached. With overflow enabled
-(the default), the oldest track is dropped instead.
+(the default), the most recently queued track (the back of the queue) is dropped instead —
+not the oldest one — to make room for the new item. All three (along with `queue[index] = item`)
+also raise `TypeError` if `item` isn't a `Track` instance.
 
 :::
 
@@ -140,7 +142,7 @@ After you have initialized your function, we need to fill in the proper paramete
 
 * - `atomic`
   - `bool`
-  - If set to `True` and the queue was constructed with `overflow=False`, either every track is added or none are — if `max_size` would be exceeded, `QueueFull` is raised and nothing is added. If the queue allows overflow (the default), `atomic=True` still adds every track, dropping older queued tracks to make room instead of raising. If set to `False`, as many tracks are added as fit and the rest are silently dropped, with no exception raised. Default value is `True`.
+  - If set to `True` and the queue was constructed with `overflow=False`, either every track is added or none are — if `max_size` would be exceeded, `QueueFull` is raised and nothing is added. If the queue allows overflow (the default), `atomic=True` still adds every track, dropping the most recently queued existing tracks (not the oldest) to make room instead of raising. If set to `False`, as many tracks are added as fit and the rest are silently dropped, with no exception raised. Default value is `True`.
 
 :::
 
@@ -216,6 +218,49 @@ track = queue[<index>]
 ```
 
 Slicing works too (`queue[start:end]`), returning a `list[Track]`.
+
+### Other operators
+
+`Queue` also implements the standard container dunders:
+
+:::{list-table}
+:header-rows: 1
+
+* - Method
+  - Behavior
+
+* - `len(queue)`
+  - Same as `Queue.size`.
+
+* - `bool(queue)`
+  - `False` if empty.
+
+* - `track in queue`
+  - Membership check.
+
+* - `for track in queue`
+  - Front to back.
+
+* - `reversed(queue)`
+  - Back to front.
+
+* - `queue[index] = track`, `del queue[index]`
+  - Set/delete by index.
+
+* - `queue(track)`
+  - Shorthand for `Queue.put(track)`.
+
+* - `queue += track` / `queue += iterable`
+  - Shorthand for `Queue.put(track)` or `Queue.extend(iterable)`.
+
+* - `queue + iterable`
+  - New `Queue` with the original members plus `iterable`. Doesn't mutate the original.
+
+* - `repr(queue)`
+  - Debug string with `max_size` and member count.
+
+:::
+
 
 ## Getting the next track in the queue
 
@@ -383,7 +428,9 @@ single track (`LoopMode.TRACK`).
 
 :::
 
-After running this function, any items before the specified item will be removed, effectively "jumping" to the specified item in the queue. The next item obtained using `Queue.get()` will be your specified track.
+Under `LoopMode.NONE`, items before the target are removed and `Queue.get()` returns it next.
+Under `LoopMode.QUEUE`, nothing is removed — only the internal position pointer moves, so the
+loop continues from there.
 
 ## Clearing the queue
 
@@ -398,8 +445,8 @@ change the current loop mode.
 
 ## Copying the queue
 
-To create an independent copy of a queue, including its members, loop mode, and current track,
-use `Queue.copy()` on the queue instance:
+To create an independent copy of a queue, including its members, `overflow` flag, loop mode, and
+current track, use `Queue.copy()` on the queue instance:
 
 ```py
 new_queue = queue.copy()

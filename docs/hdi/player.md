@@ -35,12 +35,16 @@ There are also properties the `Player` class has to access certain values:
   - Description
 
 * - `Player.bot`
-  - `Client`
-  - Returns the bot associated with this player instance.
+  - `BotType`
+  - Returns the bot associated with this player instance (a Discord.py or Py-cord `Client`/`commands.Bot`).
 
 * - `Player.channel`
-  - `VoiceChannel`
-  - Returns the voice channel this player is connected to.
+  - `Optional[Union[VoiceChannel, StageChannel]]`
+  - Returns the voice or stage channel this player is connected to, or `None` after `disconnect()`.
+
+* - `Player.client`
+  - `BotType`
+  - Same object as `Player.bot`. Required by discord.py's `VoiceProtocol` contract, which sets/reads this attribute directly.
 
 * - `Player.current`
   - `Optional[Track]`
@@ -64,7 +68,7 @@ There are also properties the `Player` class has to access certain values:
 
 * - `Player.is_paused`
   - `bool`
-  - Returns whether or not the player has a track which is paused or not.
+  - Returns whether or not the player is connected and paused. This only checks the connection and paused state, not whether a track is currently loaded — see `Player.current` for that.
 
 * - `Player.is_playing`
   - `bool`

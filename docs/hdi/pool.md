@@ -36,7 +36,7 @@ After you have initialized your function, we need to fill in the proper paramete
   - Description
 
 * - `bot`
-  - `Client`
+  - `BotType`
   - A Discord.py or Py-cord `Client` object (can be either a `Client` or a `commands.Bot`)
 
 * - `host`

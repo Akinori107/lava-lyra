@@ -63,7 +63,7 @@ There are also properties the `Node` class has to access certain values:
 
 * - `Node.latency` `Node.ping`
   - `float`
-  - Returns the latency of the node, or `-1.0` if no probe has succeeded yet (startup warmup, or a node that's never been reachable). After the first successful probe, returns the last known value even if the node later drops.
+  - Returns the latency of the node, or `-1.0` if the last probe failed or none has run yet (this includes a node dropping after being reachable — the cache isn't sticky).
 
 * - `Node.player_count`
   - `int`
@@ -330,6 +330,33 @@ responds with a non-2xx status or a non-JSON body.
 If the node has the LavaSearch plugin installed (check `Node.search_enabled`), you can search
 for tracks, albums, artists, playlists, and text in a single call using `Node.load_search()`
 
+After you have initialized your function, we need to fill in the proper parameters:
+
+:::{list-table}
+:header-rows: 1
+
+* - Name
+  - Type
+  - Description
+
+* - `query`
+  - `str`
+  - The string you want to search up.
+
+* - `types`
+  - `List[LavaSearchType]`
+  - Result categories to search for. Raises `ValueError` if empty.
+
+* - `search_type`
+  - `SearchType | None`
+  - Optional search provider. Defaults to Lavalink's configured platform if omitted.
+
+* - `ctx`
+  - `ContextType | None`
+  - Optional value which sets a `Context` object on the tracks you search.
+
+:::
+
 ```py
 result = await Node.load_search(
     query="<your query here>",
@@ -342,6 +369,13 @@ result = await Node.load_search(
 This returns a `SearchResult` (or `None` if nothing was found) grouping the matched tracks,
 albums, artists, playlists, and text results by type. See [](search.md) for details on
 `SearchResult` and `LavaSearchType`.
+
+:::{important}
+
+Raises `NodeRestException` if the LavaSearch plugin isn't installed on the node or the server
+returns an API error. Raises `ValueError` if `types` is empty.
+
+:::
 
 ## Monitoring node health
 
