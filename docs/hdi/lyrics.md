@@ -50,7 +50,7 @@ else:
 
 * - `skip_track_source`
   - `bool`
-  - If `True`, skips the track's original source when searching for lyrics. Default: `False`.
+  - If `True`, skips the track's original source when searching for lyrics (Lavalink v4 only). Default: `False`.
 
 * - `lang`
   - `Optional[str]`
@@ -113,6 +113,8 @@ if success:
     print("Subscribed to live lyrics!")
 ```
 
+`subscribe_lyrics()` also accepts `skip_track_source`, sent as a query parameter regardless of node type (unlike `fetch_lyrics()`, it isn't gated to Lavalink v4).
+
 ```py
 @commands.Cog.listener()
 async def on_lyra_lyrics_line(self, player, track, line):
@@ -153,7 +155,7 @@ The `Lyrics` object has the following properties:
 
 * - `text`
   - `Optional[str]`
-  - The full lyrics as a plain string (if available).
+  - The full lyrics as a plain string. Only set on the Lavalink v4 path — always `None` on NodeLink.
 
 * - `lines`
   - `List[LyricLine]`

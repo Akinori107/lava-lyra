@@ -345,7 +345,11 @@ class Player(VoiceProtocolType):
         return await self._lyrics_manager.fetch_lyrics(track, skip_track_source, lang=lang)
 
     async def subscribe_lyrics(self, skip_track_source: bool = False) -> bool:
-        """Subscribe to live lyrics"""
+        """Subscribe to live lyrics
+
+        Args:
+            skip_track_source: Skip track source when searching
+        """
         return await self._lyrics_manager.subscribe_lyrics(skip_track_source)
 
     async def unsubscribe_lyrics(self) -> bool:
@@ -840,7 +844,7 @@ class Player(VoiceProtocolType):
         return self._paused
 
     async def set_volume(self, volume: int) -> int:
-        """Sets the volume of the player as an integer. Lavalink accepts values from 0 to 500."""
+        """Sets the volume of the player as an integer. Lavalink accepts values from 0 to 1000."""
         await self._send_player_request({"volume": volume})
         self._volume = volume
 

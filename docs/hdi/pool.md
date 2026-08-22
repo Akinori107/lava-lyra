@@ -118,8 +118,6 @@ After you have initialized your function, we need to fill in the proper paramete
 
 :::
 
-All the other parameters not listed here have default values that are either set within the function or set later in the initialization of the node. If you would like to set these parameters to a different value, you are free to do so.
-
 After you set those parameters, your function should look something like this:
 
 ```py

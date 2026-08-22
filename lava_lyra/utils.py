@@ -249,9 +249,6 @@ class Ping:
                 pass
             return -1.0
 
-    def ping(self) -> float:
-        return self.get_ping()
-
 
 class LavalinkVersion(NamedTuple):
     major: int
@@ -267,12 +264,6 @@ class LavalinkVersion(NamedTuple):
             (self.major == other.major) and (self.minor == other.minor) and (self.fix == other.fix)
         )
 
-    def __ne__(self, other: object) -> bool:
-        if not isinstance(other, LavalinkVersion):
-            return NotImplemented
-
-        return not (self == other)
-
     @override
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, LavalinkVersion):
@@ -286,13 +277,6 @@ class LavalinkVersion(NamedTuple):
             return NotImplemented
 
         return (self.major, self.minor, self.fix) > (other.major, other.minor, other.fix)
-
-    @override
-    def __le__(self, other: object) -> bool:
-        if not isinstance(other, LavalinkVersion):
-            return NotImplemented
-
-        return (self < other) or (self == other)
 
     @override
     def __ge__(self, other: object) -> bool:
@@ -312,7 +296,6 @@ class ConnectionQualityTracker:
         "_connection_start_time",
         "_consecutive_failures",
         "_failure_start_time",
-        "_last_reconnection_time",
         "_latency_samples",
         "_max_latency_samples",
         "_reconnection_count",
@@ -321,7 +304,6 @@ class ConnectionQualityTracker:
 
     def __init__(self, max_latency_samples: int = 10) -> None:
         self._reconnection_count: int = 0
-        self._last_reconnection_time: float = 0.0
         self._connection_start_time: float = time.time()
         self._total_downtime: float = 0.0
         self._latency_samples: list[float] = []
@@ -337,7 +319,6 @@ class ConnectionQualityTracker:
             self._failure_start_time = 0.0
 
         self._reconnection_count += 1
-        self._last_reconnection_time = current_time
 
     def record_connection_success(self) -> None:
         """Record a successful connection."""

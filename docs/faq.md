@@ -15,7 +15,7 @@ For everything else, double-check the values above against your node's config an
 
 :::{note}
 
-A `password` mismatch doesn't raise this error — it raises a separate `NodeConnectionFailure` with the message "The password for node '...' is invalid".
+A `password` mismatch raises the same `NodeConnectionFailure`, but with the message "The password for node '...' is invalid" instead.
 
 :::
 

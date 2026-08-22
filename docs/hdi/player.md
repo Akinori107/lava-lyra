@@ -102,6 +102,10 @@ There are also properties the `Player` class has to access certain values:
   - `bool`
   - Returns whether lyrics currently exist for the current track.
 
+* - `Player.is_subscribed`
+  - `bool`
+  - Returns whether the player is subscribed to live lyrics.
+
 :::
 
 To fetch lyrics for a track on demand, use `Player.fetch_lyrics()`
@@ -444,7 +448,7 @@ await Player.set_volume(...)
 ```
 
 :::{important}
-Lavalink accept ranges from 0 to 500 for this parameter. Inputting a value either higher or lower
+Lavalink accept ranges from 0 to 1000 for this parameter. Inputting a value either higher or lower
 than this amount will **not work.**
 :::
 
@@ -632,6 +636,12 @@ await Player.edit_filter(
 ```
 
 After running this function, you should see your currently playing track sound different depending on the edit you made.
+
+:::{important}
+
+Raises `NodelinkExclusive` if the filter is Nodelink-exclusive and the node isn't a Nodelink instance, `FilterTagInvalid` if no filter with `filter_tag` exists, and `FilterInvalidArgument` if `edited_filter` isn't the same type as the current filter, is identical to it, or has a different tag.
+
+:::
 
 ### Resetting all filters
 

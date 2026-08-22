@@ -427,7 +427,7 @@ class FiltersChangedEvent(LyraEvent):
 
 
 class PauseEvent(LyraEvent):
-    """Fired when player is paused (NodeLink specific)"""
+    """Fired when the player is paused or resumed (NodeLink specific)"""
 
     name = "pause"
     __slots__ = ("paused", "player")
@@ -469,7 +469,7 @@ class MixStartedEvent(LyraEvent):
     Attributes:
         player: The player instance
         mix_id: Unique identifier for this mix layer
-        track: The track being mixed in
+        track: The track being mixed in (or None)
         volume: Volume level of the mix layer (0.0 - 1.0)
     """
 

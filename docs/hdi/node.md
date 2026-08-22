@@ -63,7 +63,7 @@ There are also properties the `Node` class has to access certain values:
 
 * - `Node.latency` `Node.ping`
   - `float`
-  - Returns the latency of the node.
+  - Returns the latency of the node. Returns `-1.0` while the initial probe is still warming up.
 
 * - `Node.player_count`
   - `int`
@@ -121,11 +121,11 @@ There are also properties the `Node` class has to access certain values:
   - CPU load caused by the node process itself.
 
 * - `players_total`
-  - `Optional[int]`
+  - `int`
   - Total number of players on the node.
 
 * - `players_active`
-  - `Optional[int]`
+  - `int`
   - Number of players currently playing.
 
 * - `uptime`
@@ -371,7 +371,44 @@ and backs the `NodeAlgorithm.by_health` selection algorithm. It has a few things
   - Records that the node reconnected after a disconnect, factored into its stability score.
 
 * - `NodeHealthMonitor.quality_tracker`
-  - The underlying tracker object used to compute connection-quality statistics.
+  - The underlying `ConnectionQualityTracker` object used to compute connection-quality statistics.
+
+:::
+
+`ConnectionQualityTracker` (`NodeHealthMonitor.quality_tracker`) itself exposes:
+
+:::{list-table}
+:header-rows: 1
+
+* - Member
+  - Description
+
+* - `ConnectionQualityTracker.record_reconnection()`
+  - Records a reconnection event.
+
+* - `ConnectionQualityTracker.record_connection_success()`
+  - Records a successful connection.
+
+* - `ConnectionQualityTracker.record_connection_failure()`
+  - Records a connection failure.
+
+* - `ConnectionQualityTracker.record_latency(latency)`
+  - Records a latency sample, used to compute `average_latency`.
+
+* - `ConnectionQualityTracker.average_latency`
+  - `float` property. Average of recent latency samples, or `-1.0` if none have been recorded.
+
+* - `ConnectionQualityTracker.uptime_percentage`
+  - `float` property. Percentage of time connected since tracking started.
+
+* - `ConnectionQualityTracker.reconnection_count`
+  - `int` property. Total number of recorded reconnections.
+
+* - `ConnectionQualityTracker.consecutive_failures`
+  - `int` property. Current streak of consecutive connection failures.
+
+* - `ConnectionQualityTracker.is_stable`
+  - `bool` property. `True` if there are no consecutive failures, uptime is above 95%, and average latency is under 1000ms (or no samples yet).
 
 :::
 

@@ -72,11 +72,11 @@ To add a song to the queue, we must use `Queue.put()`
 Queue.put()
 ```
 
-After you have initialized your function, we need to pass the `Track` positionally — `put()` doesn't accept `item` as a keyword argument:
+After you have initialized your function, we need to pass the item positionally — `put()` doesn't accept `item` as a keyword argument. It accepts a single `Track`, a `list[Track]`, or a `Playlist`, and returns the number of tracks added:
 
 ```py
 
-Queue.put(<your Track here>)
+Queue.put(<your Track, list[Track], or Playlist here>)
 
 ```
 
@@ -201,6 +201,8 @@ After running this function, it'll return the first track from the queue and rem
 If you have a queue loop mode set, this behavior will be overridden since the queue is not allowed to remove tracks from the queue if its looping.
 
 :::
+
+Raises `QueueEmpty` if there are no items in the queue.
 
 ### Peeking at the next track
 
@@ -365,10 +367,10 @@ change the current loop mode.
 ## Copying the queue
 
 To create an independent copy of a queue, including its members, loop mode, and current track,
-use `Queue.copy()`
+use `Queue.copy()` on the queue instance:
 
 ```py
-new_queue = Queue.copy()
+new_queue = queue.copy()
 ```
 
 This returns a new `Queue` instance — mutating the copy does not affect the original queue.

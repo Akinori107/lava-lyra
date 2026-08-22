@@ -241,7 +241,7 @@ class Node:
 
     @property
     def bot(self) -> BotType:
-        """Property which returns the py-cord client linked to this node"""
+        """Property which returns the Discord.py or Py-cord client linked to this node"""
         return self._bot
 
     @property
@@ -1381,7 +1381,7 @@ class NodePool(metaclass=_NodePoolMeta):
 
     @classmethod
     async def disconnect(cls) -> None:
-        """Disconnects all available nodes from the node pool."""
+        """Disconnects all nodes from the node pool."""
 
         for node in list(cls._nodes.values()):
             await node.disconnect()

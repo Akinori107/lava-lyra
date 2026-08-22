@@ -94,8 +94,12 @@ from discord.ext import commands
 
 class MyBot(commands.Bot):
     def __init__(self) -> None:
+        intents = discord.Intents.default()
+        intents.message_content = True
+
         super().__init__(
             command_prefix="!",
+            intents=intents,
             activity=discord.Activity(type=discord.ActivityType.listening, name="to music!"),
         )
 

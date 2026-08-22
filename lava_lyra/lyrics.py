@@ -181,7 +181,7 @@ class LyricsManager:
 
         Args:
             track: Track object (default: current track)
-            skip_track_source: Skip track source when searching (NodeLink only)
+            skip_track_source: Skip track source when searching (Lavalink v4 only)
             lang: Language code for YouTube captions (NodeLink only)
 
         Returns:
