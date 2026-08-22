@@ -38,6 +38,10 @@ There are also properties the `Player` class has to access certain values:
   - `Client`
   - Returns the bot associated with this player instance.
 
+* - `Player.channel`
+  - `VoiceChannel`
+  - Returns the voice channel this player is connected to.
+
 * - `Player.current`
   - `Optional[Track]`
   - Returns the currently playing track, or `None` if nothing is loaded.
@@ -149,11 +153,11 @@ After you have initialized your function, we need to fill in the proper paramete
   - The string you want to search up
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the tracks you search.
 
 * - `search_type`
-  - `SearchType`
+  - `SearchType | None`
   - Enum which sets the provider to search from. Default value is `SearchType.ytsearch`
 
 * - `filters`
@@ -213,7 +217,7 @@ After you have initialized your function, we need to fill in the proper paramete
   - The track to fetch recommendations for
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the recommendations you fetch.
 
 :::
@@ -257,7 +261,7 @@ After you have initialized your function, we need to fill in the proper paramete
   - The Lavalink track identifier to build a track from
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the track it builds.
 
 :::
@@ -285,6 +289,10 @@ await voice_channel.connect(cls=Player)
 
 This will instance the player and make it available to your guild. If you want to access your player after instancing it,
 you must use either `Guild.voice_client` or `Context.voice_client`.
+
+Discord's `connect()` only forwards the `cls` argument, so `Player` picks a node for you via
+`NodePool.get_node()`. If you need a specific node instead, instantiate `Player` yourself and pass
+`node=<your Node here>`, then hand that instance to `channel.connect(cls=lambda *a, **kw: player)`.
 
 ## Controlling the player
 
@@ -448,7 +456,7 @@ await Player.set_volume(...)
 ```
 
 :::{important}
-Lavalink accept ranges from 0 to 1000 for this parameter. Inputting a value either higher or lower
+Lavalink accepts ranges from 0 to 1000 for this parameter. Inputting a value either higher or lower
 than this amount will **not work.**
 :::
 

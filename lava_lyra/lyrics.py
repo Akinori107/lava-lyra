@@ -50,7 +50,7 @@ class Lyrics:
     def _parse_data(self, data: dict[str, Any]) -> None:
         """Parse lyrics data from different formats"""
         # NodeLink format
-        if data.get("loadType") == "lyrics" and "data" in data:
+        if data.get("loadType") == "lyrics" and data.get("data") is not None:
             lyrics_data = data["data"]
             self.name = lyrics_data.get("name")
             self.synced = lyrics_data.get("synced", False)

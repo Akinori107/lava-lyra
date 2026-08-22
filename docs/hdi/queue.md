@@ -108,6 +108,14 @@ Queue.put_at_front(item=<your Track here>)
 
 ```
 
+:::{important}
+
+`put()`, `put_at_index()`, and `put_at_front()` all raise `QueueFull` if the queue was
+constructed with `overflow=False` and `max_size` has been reached. With overflow enabled
+(the default), the oldest track is dropped instead.
+
+:::
+
 ### Adding multiple tracks at once
 
 To add several tracks to the end of the queue in one call (for example, all the tracks from a
@@ -132,7 +140,7 @@ After you have initialized your function, we need to fill in the proper paramete
 
 * - `atomic`
   - `bool`
-  - If set to `True`, either every track is added or none are — if the queue's `max_size` would be exceeded, `QueueFull` is raised and nothing is added. If set to `False`, as many tracks are added as fit and the rest are silently dropped, with no exception raised. Default value is `True`.
+  - If set to `True` and the queue was constructed with `overflow=False`, either every track is added or none are — if `max_size` would be exceeded, `QueueFull` is raised and nothing is added. If the queue allows overflow (the default), `atomic=True` still adds every track, dropping older queued tracks to make room instead of raising. If set to `False`, as many tracks are added as fit and the rest are silently dropped, with no exception raised. Default value is `True`.
 
 :::
 
@@ -144,8 +152,25 @@ Queue.extend(iterable=<your list of Tracks here>, atomic=<True/False>)
 
 :::{important}
 
-Even with `atomic=True`, if overflow is enabled for the queue (see `Queue.max_size`), items can
-still be dropped to make room rather than raising `QueueFull`.
+Even with `atomic=True`, if the queue was constructed with `overflow=True` (the default), items
+can still be dropped to make room rather than raising `QueueFull`. There's no public accessor
+for this setting — track what you passed to `Queue(overflow=...)` yourself.
+
+:::
+
+## Getting the raw queue
+
+If you need the queue's members as a plain `list[Track]` — to iterate, filter, or pass to
+something that expects a list — use `Queue.get_queue()`
+
+```py
+Queue.get_queue()
+```
+
+:::{important}
+
+This returns the queue's internal list directly, not a copy — mutating it (e.g. `.append()`,
+`.sort()`) mutates the queue itself. Use `Queue.copy()` first if you need an independent list.
 
 :::
 
@@ -173,6 +198,12 @@ Queue.find_position(item=<your Track here>)
 
 After running the function, it should return the position of the track as an integer.
 
+:::{important}
+
+Raises `ValueError` if the item is not in the queue.
+
+:::
+
 
 ### Getting track with its index
 
@@ -180,11 +211,11 @@ If you have the index of the track and want to get the `Track` object, you can i
 
 ```py
 
-track = Queue[<index>]
+track = queue[<index>]
 
 ```
 
-Slicing works too (`Queue[start:end]`), returning a `list[Track]`.
+Slicing works too (`queue[start:end]`), returning a `list[Track]`.
 
 ## Getting the next track in the queue
 
@@ -194,15 +225,20 @@ To get the next track in the queue, we need to use `Queue.get()`
 Queue.get()
 ```
 
-After running this function, it'll return the first track from the queue and remove it.
+After running this function, it'll return the next track to play and, if the queue isn't
+looping, remove it from the queue.
 
 :::{note}
 
-If you have a queue loop mode set, this behavior will be overridden since the queue is not allowed to remove tracks from the queue if its looping.
+If you have a queue loop mode set, tracks are never removed from the queue: `LoopMode.TRACK`
+keeps returning the current track, and `LoopMode.QUEUE` advances through the queue without
+popping from it.
 
 :::
 
-Raises `QueueEmpty` if there are no items in the queue.
+Raises `QueueEmpty` if there are no items in the queue — except under `LoopMode.TRACK` once a
+current track has been set, which keeps returning that track even after the queue itself has
+been emptied.
 
 ### Peeking at the next track
 
@@ -219,7 +255,7 @@ for this purpose would double-advance the queue under `LoopMode.QUEUE`, silently
 
 :::{important}
 
-Raises `QueueEmpty` if there is nothing to play next.
+Same `QueueEmpty` behavior as `Queue.get()` above.
 
 :::
 
@@ -262,7 +298,8 @@ Queue.remove(item=<your Track here>)
 
 :::{important}
 
-Your `Track` object must be in the queue if you want to remove it. Make sure you follow [](queue.md#getting-a-track-from-the-queue) before running this function.
+Your `Track` object must be in the queue if you want to remove it — raises `ValueError`
+otherwise. Make sure you follow [](queue.md#getting-a-track-from-the-queue) before running this function.
 
 :::
 
@@ -341,13 +378,8 @@ Queue.jump(item=<your Track here>)
 
 :::{important}
 
-Your `Track` object must be in the queue if you want to jump to it. Make sure you follow [](queue.md#getting-a-track-from-the-queue) before running this function.
-
-:::
-
-:::{important}
-
-Raises `QueueException` if the queue is currently looping a single track (`LoopMode.TRACK`).
+Raises `QueueException` if the item is not in the queue, or if the queue is currently looping a
+single track (`LoopMode.TRACK`).
 
 :::
 

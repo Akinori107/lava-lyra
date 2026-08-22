@@ -49,7 +49,7 @@ class LyraEvent(ABC):
     py-cord::
 
         @bot.listen()
-        async def on_lyra_track_start(self, player, track):
+        async def on_lyra_track_start(player, track):
             pass
 
     discord.py::
@@ -113,8 +113,8 @@ class TrackEndEvent(LyraEvent):
 
 class TrackStuckEvent(LyraEvent):
     """Fired when a track is stuck and cannot be played. Returns the player
-    associated with the event along with the lyra.Track object
-    to be further parsed by the end user.
+    associated with the event along with the lyra.Track object and the
+    threshold in milliseconds that was exceeded.
     """
 
     name = "track_stuck"
@@ -136,6 +136,11 @@ class TrackStuckEvent(LyraEvent):
 
 
 class TrackExceptionPayload:
+    """Exception details from a `TrackExceptionEvent`: `message`, Lavalink's
+    `severity` classification (`COMMON`/`SUSPICIOUS`/`FAULT`), and the
+    underlying `cause`, when Lavalink provides one.
+    """
+
     __slots__ = ("cause", "message", "severity")
 
     def __init__(
@@ -185,6 +190,11 @@ class TrackExceptionEvent(LyraEvent):
 
 
 class WebSocketClosedPayload:
+    """Details from a `WebSocketClosedEvent`. `guild` is resolved lazily
+    from the bot to avoid a circular import, and is `None` if uncached.
+    `by_remote` is whether Discord's voice servers closed the connection.
+    """
+
     __slots__ = ("_bot", "_guild_id", "by_remote", "code", "reason")
 
     def __init__(self, data: dict[str, Any], bot: BotType | None = None):
@@ -300,7 +310,8 @@ class LyricsLineEvent(LyraEvent):
 
 class NodeConnectedEvent(LyraEvent):
     """Fired when a node successfully connects to Lavalink.
-    Returns the node identifier and whether this is a reconnection.
+    Returns the node identifier, whether the node is a NodeLink instance,
+    and whether this is a reconnection.
     """
 
     name = "node_connected"
@@ -320,7 +331,8 @@ class NodeConnectedEvent(LyraEvent):
 
 class NodeDisconnectedEvent(LyraEvent):
     """Fired when a node disconnects from Lavalink.
-    Returns the node identifier and the number of players that were affected.
+    Returns the node identifier, whether the node is a NodeLink instance,
+    and the number of players that were affected.
     """
 
     name = "node_disconnected"
@@ -340,7 +352,8 @@ class NodeDisconnectedEvent(LyraEvent):
 
 class NodeReconnectingEvent(LyraEvent):
     """Fired when a node is attempting to reconnect to Lavalink.
-    Returns the node identifier and the retry delay in seconds.
+    Returns the node identifier, whether the node is a NodeLink instance,
+    and the retry delay in seconds.
     """
 
     name = "node_reconnecting"

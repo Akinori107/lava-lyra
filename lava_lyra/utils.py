@@ -179,9 +179,6 @@ class Ping:
     def __init__(self, host: str, port: int, timeout: int = 5) -> None:
         self.timer = self.Timer()
 
-        self._successed = 0
-        self._failed = 0
-        self._conn_time: float | None = None
         self._host = host
         self._port = port
         self._timeout = timeout

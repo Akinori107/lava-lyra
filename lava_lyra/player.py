@@ -28,7 +28,7 @@ from .exceptions import (
     TrackLoadError,
 )
 from .filters import Filter, Timescale
-from .lyrics import LyricsManager
+from .lyrics import LyricLine, Lyrics, LyricsManager
 from .objects import Playlist, Track
 from .pool import Node, NodePool
 from .utils import LavalinkVersion, voice_field
@@ -274,7 +274,11 @@ class Player(VoiceProtocolType):
 
     @property
     def is_paused(self) -> bool:
-        """Property which returns whether or not the player has a track which is paused or not."""
+        """Property which returns whether or not the player is paused.
+
+        This only checks the connection and paused state, not whether a
+        track is currently loaded — see `Player.current` for that.
+        """
         return self._is_connected and self._paused
 
     @property
@@ -315,7 +319,7 @@ class Player(VoiceProtocolType):
         return self.guild.id not in self._node._players
 
     @property
-    def lyrics(self):
+    def lyrics(self) -> Lyrics | None:
         """Get the current track's lyrics"""
         return self._lyrics_manager.lyrics
 
@@ -340,7 +344,7 @@ class Player(VoiceProtocolType):
         track: Track | None = None,
         skip_track_source: bool = False,
         lang: str | None = None,
-    ):
+    ) -> Lyrics | None:
         """Fetch lyrics"""
         return await self._lyrics_manager.fetch_lyrics(track, skip_track_source, lang=lang)
 
@@ -356,7 +360,7 @@ class Player(VoiceProtocolType):
         """Unsubscribe from live lyrics"""
         return await self._lyrics_manager.unsubscribe_lyrics()
 
-    def get_current_lyrics_lines(self, range_seconds: float = 5.0):
+    def get_current_lyrics_lines(self, range_seconds: float = 5.0) -> list[LyricLine]:
         """Get lyric lines near the current playback position"""
         return self._lyrics_manager.get_current_lyrics_lines(range_seconds)
 

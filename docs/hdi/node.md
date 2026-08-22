@@ -26,8 +26,8 @@ There are also properties the `Node` class has to access certain values:
   - Description
 
 * - `Node.bot`
-  - `Client`
-  - Returns the Discord.py or Py-cord client linked to this node.
+  - `discord.Bot` (Py-cord) / `commands.Bot` (Discord.py)
+  - Returns the bot instance linked to this node.
 
 * - `Node.identifier`
   - `str`
@@ -63,7 +63,7 @@ There are also properties the `Node` class has to access certain values:
 
 * - `Node.latency` `Node.ping`
   - `float`
-  - Returns the latency of the node. Returns `-1.0` while the initial probe is still warming up.
+  - Returns the latency of the node, or `-1.0` if no probe has succeeded yet (startup warmup, or a node that's never been reachable). After the first successful probe, returns the last known value even if the node later drops.
 
 * - `Node.player_count`
   - `int`
@@ -74,8 +74,8 @@ There are also properties the `Node` class has to access certain values:
   - Returns a dict containing the guild ID and the player object.
 
 * - `Node.pool`
-  - `NodePool`
-  - Returns the pool this node is apart of.
+  - `type[NodePool]`
+  - Returns the `NodePool` class this node is part of. `NodePool` is a classmethod-only container, not instantiated.
 
 * - `Node.stats`
   - `NodeStats`
@@ -177,11 +177,11 @@ After you have initialized your function, we need to fill in the proper paramete
   - The string you want to search up
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the tracks you search.
 
 * - `search_type`
-  - `SearchType`
+  - `SearchType | None`
   - Enum which sets the provider to search from. Default value is `SearchType.ytsearch`
 
 * - `filters`
@@ -243,7 +243,7 @@ After you have initialized your function, we need to fill in the proper paramete
   - The Lavalink track identifier to build a track from
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the track it builds.
 
 :::
@@ -318,8 +318,10 @@ await Node.send(
 
 :::{important}
 
-Raises `NodeNotAvailable` if the node isn't available or has no active HTTP session (call
-`Node.connect()` first). Endpoints under `sessions/` also require an active session ID.
+Raises `NodeNotAvailable` if the node isn't available, has no active HTTP session (call
+`Node.connect()` first), or the underlying request fails at the connection level. Endpoints
+under `sessions/` also require an active session ID. Raises `NodeRestException` if the server
+responds with a non-2xx status or a non-JSON body.
 
 :::
 
@@ -332,7 +334,7 @@ for tracks, albums, artists, playlists, and text in a single call using `Node.lo
 result = await Node.load_search(
     query="<your query here>",
     types=[<LavaSearchType values here>],
-    search_type=<optional SearchType, defaults to Node's configured search type>,
+    search_type=<optional SearchType, defaults to Lavalink's configured search platform if omitted>,
     ctx=<optional ctx object here>,
 )
 ```
@@ -352,7 +354,7 @@ and backs the `NodeAlgorithm.by_health` selection algorithm. It has a few things
 * - Member
   - Description
 
-* - `NodeHealthMonitor.get_health_score(latency, player_count)`
+* - `NodeHealthMonitor.get_health_score(current_latency, player_count)`
   - Computes a health score from the given latency and player count. `Node.health_score` calls this for you with the node's current values.
 
 * - `NodeHealthMonitor.is_circuit_open`
@@ -446,7 +448,7 @@ After you have initialized your function, we need to fill in the proper paramete
   - The track to fetch recommendations for
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - Optional value which sets a `Context` object on the recommendations you fetch.
 
 :::
@@ -463,7 +465,8 @@ await Node.get_recommendations(
 ```
 
 Recommendations are only supported for Spotify, Deezer, Tidal, JioSaavn, and YouTube tracks —
-`Node.get_recommendations()` raises `TrackLoadError` for any other `track_type`. When the source
+`Node.get_recommendations()` raises `TrackLoadError` for any other `track_type`, and `TypeError`
+if `track` is `None`. When the source
 is supported, this returns whatever the underlying search would: a `list[Track]`, a `Playlist`
 (e.g. YouTube's autoplay radio can resolve to one), or `None` if the search came back empty —
 check which you got with `isinstance()` before iterating.
@@ -489,6 +492,8 @@ you a `RoutePlanner` to check its status and manage banned/failing addresses.
 ```py
 route_planner = node.route_planner
 ```
+
+`RoutePlanner.node` holds a reference back to the owning `Node`.
 
 ### Getting the route planner status
 

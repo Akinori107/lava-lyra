@@ -87,7 +87,7 @@ The `Track` object has the following attributes:
   - The Unix timestamp the track was built/searched at, if one was supplied.
 
 * - `ctx`
-  - `Optional[commands.Context]`
+  - `ContextType | None`
   - The `Context` object supplied when the track was built/searched, if any. Used to derive `requester` when one isn't explicitly passed.
 
 :::
@@ -125,7 +125,7 @@ Returned when a query resolves to a playlist or album (e.g. a Spotify/YouTube pl
 
 * - `playlist_type`
   - `PlaylistType`
-  - Which source the playlist came from (`PlaylistType.YOUTUBE`, `PlaylistType.SPOTIFY`, etc.).
+  - Which source the playlist came from (`PlaylistType.YOUTUBE`, `PlaylistType.SPOTIFY`, etc.), for playlists loaded via `Node.get_tracks()`/`Node.build_track()`. Albums, artists, and playlists returned by `Node.load_search()` (LavaSearch) are always `PlaylistType.OTHER` regardless of their actual source — see [](search.md).
 
 * - `selected_track`
   - `Optional[Track]`

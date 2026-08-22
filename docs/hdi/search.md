@@ -75,8 +75,15 @@ if result:
   - The search platform to use (e.g. `ytsearch`, `spsearch`, `scsearch`). Uses the server default if not provided.
 
 * - `ctx`
-  - `Optional[Context]`
+  - `ContextType | None`
   - Optional Discord context to attach to result tracks.
+
+:::
+
+:::{important}
+
+Raises `NodeRestException` if the LavaSearch plugin is not installed on the node or the request
+fails, and `ValueError` if `types` is empty.
 
 :::
 

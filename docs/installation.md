@@ -111,6 +111,13 @@ pip install lava-lyra[py-cord]
 pip install lava-lyra[discord.py]
 ```
 
+For better performance under load, you can also install the `speed` extra, which pulls in
+`aiohttp[speedups]`, `aiodns`, and `orjson`:
+
+```
+pip install lava-lyra[py-cord,speed]
+```
+
 ## Next Steps
 
 After installing Lyra, get familiar with how it works by starting with [an example.](quickstart.md)
